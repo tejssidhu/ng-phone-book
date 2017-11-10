@@ -1,16 +1,37 @@
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+import { appRoutes } from './routes';
 
 import { AppComponent } from './app.component';
+import { LoginComponent, AuthService } from './user/index';
+import { NavBarComponent } from './nav/index';
+//import { TOASTR_TOKEN, Toastr } from './shared/index';
+
+//declare let toastr: Toastr;
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NavBarComponent
+  ],
+  providers: [
+  AuthService//,
+/*   {
+      provide: TOASTR_TOKEN,
+      useValue: toastr
+  } */
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
