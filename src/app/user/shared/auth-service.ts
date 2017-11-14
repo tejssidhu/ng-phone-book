@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import * as myGlobals from '../../shared/globals';
 import { of } from 'rxjs/observable/of';
 
-const httpOptions = { 
+const httpOptions = {
     headers: new HttpHeaders().set('Content-Type', 'application/json')
 };
 
@@ -17,7 +17,7 @@ export class AuthService {
     }
 
     loginUser(userName: string, password: string): Observable<IUser> {
-        let loginInfo = { username: userName, password: password };
+        const loginInfo = { username: userName, password: password };
 
         return this.http.post<IUser>(myGlobals.serviceRootUrl + 'Authenticate', loginInfo, httpOptions).pipe(
             tap((user: IUser) => console.log(`user authenticated: userId=${user.id}`)),
@@ -51,14 +51,14 @@ export class AuthService {
     }
 
     isAuthenticated() {
-        let user = localStorage.getItem('currentUser');
+        const user = localStorage.getItem('currentUser');
         return!!user;
     }
 
     getUserId() {
         if (this.isAuthenticated()) {
-            let user = <IUser>JSON.parse(localStorage.getItem('currentUser'));
+            const user = <IUser>JSON.parse(localStorage.getItem('currentUser'));
             return user.id;
-        }        
+        }
     }
 }

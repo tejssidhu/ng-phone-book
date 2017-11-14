@@ -4,7 +4,7 @@ import { Router  } from '@angular/router';
 
 @Component({
     moduleId: module.id,
-    selector: 'login-app',
+    selector: 'app-login',
     templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
@@ -20,12 +20,14 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.authService.loginUser(this.model.username, this.model.password).subscribe(response => 
-            data => {
-                let user = response;
+        this.authService.loginUser(this.model.username, this.model.password).subscribe(
+            returnedUser => {
+                const user = returnedUser;
                 if (user) {
                     localStorage.setItem('currentUser', JSON.stringify(user));
-                    //this.router.navigate(['contacts']);
+                    this.router.navigate(['contacts']);
+                } else {
+                    this.loginInvalid = true;
                 }
             },
             error => {
