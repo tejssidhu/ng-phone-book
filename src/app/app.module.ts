@@ -9,11 +9,11 @@ import { LoginComponent, AuthService } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
 
-import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
+// import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-declare let toastr: Toastr;
+// declare let toastr: Toastr;
 
 @NgModule({
   imports: [
@@ -29,11 +29,11 @@ declare let toastr: Toastr;
     NavBarComponent
   ],
   providers: [
-    AuthService,
-    {
+    AuthService// S,
+    /* {
         provide: TOASTR_TOKEN,
         useValue: toastr
-    }
+    } */
   ],
   bootstrap: [AppComponent]
 })
