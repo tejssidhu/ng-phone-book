@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { IContact, ContactService } from './shared/index';
 import { AuthService } from '../user/shared/index';
-
- import { ModalComponent } from '../shared/modal-component';
-// import { TOASTR_TOKEN, Toastr } from '../shared/index'
+import { ModalComponent } from '../shared/modal-component';
+import { TOASTR_TOKEN, Toastr } from '../shared/toastr-service';
 import { Observable, Subscription } from 'rxjs/RX';
 
 @Component({
@@ -15,9 +14,10 @@ export class ContactListComponent implements OnInit {
     @ViewChild(ModalComponent) confirmModal: ModalComponent;
     contacts: IContact[];
     private subscription: Subscription;
+    private toastr: Toastr;
 
-    constructor(private contactService: ContactService, private authService: AuthService) {
-
+    constructor(private contactService: ContactService, private authService: AuthService, injector: Injector) {
+        this.toastr = injector.get(TOASTR_TOKEN);
     }
 
     ngOnInit() {
@@ -40,10 +40,10 @@ export class ContactListComponent implements OnInit {
                         const foundContact = this.contacts.find(contact => contact.id === id);
                         foundContact.deleted = true;
 
-                        // this.toastr.success('Contact Deleted');
+                        this.toastr.success('Contact Deleted');
                     },
                     error => {
-                        // this.toastr.error('Something went wrong');
+                        this.toastr.error('Something went wrong');
                     });
             }
             this.subscription.unsubscribe();

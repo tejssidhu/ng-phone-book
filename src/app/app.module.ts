@@ -8,9 +8,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent, AuthService } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
-// import { TOASTR_TOKEN, Toastr } from './shared/index';
+import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
 
-// declare let toastr: Toastr;
+declare let toastr: Toastr;
 
 @NgModule({
   imports: [
@@ -25,11 +25,11 @@ import { AppRoutingModule } from './/app-routing.module';
     NavBarComponent
   ],
   providers: [
-  AuthService// ,
-/*   {
-      provide: TOASTR_TOKEN,
-      useValue: toastr
-  } */
+    AuthService,
+    {
+        provide: TOASTR_TOKEN,
+        useValue: toastr
+    }
   ],
   bootstrap: [AppComponent]
 })
