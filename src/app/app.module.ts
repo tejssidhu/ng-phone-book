@@ -8,7 +8,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent, AuthService } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
+
 import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 declare let toastr: Toastr;
 
@@ -17,7 +20,8 @@ declare let toastr: Toastr;
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule.forRoot()
   ],
   declarations: [
     AppComponent,

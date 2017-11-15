@@ -1,21 +1,15 @@
-<div class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" >ngPhonebook App</a>
-        </div>
-
-        <div class="collapse navbar-collapse">
-            <!-- <ul class="nav navbar-nav" *ngIf="this.authService.isAuthenticated()">
-                <li><a [routerLink]="['/contacts']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">My Contacts</a></li>
-            </ul> -->
-            <div class="navbar-header navbar-right">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a *ngIf="!this.authService.isAuthenticated()" [routerLink]="['login']">Login</a>
-                        <a *ngIf="this.authService.isAuthenticated()" [routerLink]="['login']">Log out</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-faded">
+    <a class="navbar-brand" href="#">ngPhonebook App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav" *ngIf="this.authService.isAuthenticated()">
+            <li class="nav-item"><a class="nav-link" [routerLink]="['/contacts']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">My Contacts</a></li>
+            <li class="nav-item">
+                <a class="nav-link" *ngIf="!this.authService.isAuthenticated()" [routerLink]="['login']">Login</a>
+                <a class="nav-link" *ngIf="this.authService.isAuthenticated()" [routerLink]="['login']">Log out</a>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
