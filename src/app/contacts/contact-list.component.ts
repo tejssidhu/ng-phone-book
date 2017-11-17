@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, Injector } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IContact, ContactService } from './shared/index';
 import { AuthService } from '../user/shared/index';
-import { ModalComponent } from '../shared/modal-component';
-// import { TOASTR_TOKEN, Toastr } from '../shared/toastr-service';
-import { Observable, Subscription } from 'rxjs/RX';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {Subject} from 'rxjs/Subject';
+import {debounceTime} from 'rxjs/operator/debounceTime';
 
 @Component({
     moduleId: module.id,
@@ -11,17 +11,19 @@ import { Observable, Subscription } from 'rxjs/RX';
 })
 
 export class ContactListComponent implements OnInit {
-    @ViewChild(ModalComponent) confirmModal: ModalComponent;
+    private _deleteComplete = new Subject<string>();
+    deleteMessage: string;
     contacts: IContact[];
-    private subscription: Subscription;
-    // private toastr: Toastr;
+    deleteMessageType: string;
 
-    constructor(private contactService: ContactService, private authService: AuthService) { // , injector: Injector) {
-        // this.toastr = injector.get(TOASTR_TOKEN);
+    constructor(private contactService: ContactService, private authService: AuthService, private modalService: NgbModal) { 
     }
 
     ngOnInit() {
         this.getContacts();
+
+        this._deleteComplete.subscribe((message) => this.deleteMessage = message);
+        debounceTime.call(this._deleteComplete, 3000).subscribe(() => this.deleteMessage = null);
     }
 
     getContacts() {
@@ -31,22 +33,24 @@ export class ContactListComponent implements OnInit {
         );
     }
 
-    deleteConfirmation(id: string) {
-        this.confirmModal.openModal();
-        this.subscription = this.confirmModal.observable.subscribe(clicked => {
-            if (clicked) {
-                this.contactService.deleteContact(id).subscribe(
-                    data => {
-                        const foundContact = this.contacts.find(contact => contact.id === id);
-                        foundContact.deleted = true;
-
-                        // this.toastr.success('Contact Deleted');
-                    },
-                    error => {
-                        // this.toastr.error('Something went wrong');
-                    });
+    deleteConfirmation(content, id: string) {
+        this.modalService.open(content).result.then((result) => {
+                if (result == 'ok') {
+                    this.contactService.deleteContact(id).subscribe(
+                        data => {
+                            const foundContact = this.contacts.find(contact => contact.id === id);
+                            foundContact.deleted = true;
+    
+                            this.deleteMessageType = 'success';
+                            this._deleteComplete.next(`Contact was deleted`);
+                            // this.toastr.success('Contact Deleted');
+                        },
+                        error => {
+                            this.deleteMessageType = 'warning';
+                            this._deleteComplete.next(`Something went wrong`);
+                        });
+                }
             }
-            this.subscription.unsubscribe();
-        });
+        );
     }
 }

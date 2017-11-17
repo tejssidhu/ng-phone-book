@@ -13,21 +13,21 @@ import { ContactListComponent,
 } from './index';
 
 import { contactRoutes } from './routes';
-import { ModalComponent } from '../shared/modal-component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(contactRoutes)
+    RouterModule.forChild(contactRoutes),
+    NgbModule
   ],
   declarations: [
     ContactListComponent,
     // ContactDetailComponent,
     ContactThumbnailComponent,
     // AddContactComponent,
-    ModalComponent
   ],
   providers:    [
     // ContactListResolver,

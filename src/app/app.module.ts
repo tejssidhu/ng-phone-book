@@ -9,7 +9,7 @@ import { LoginComponent, AuthService } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
 
-// import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
+import { TOASTR_TOKEN, Toastr } from './shared/toastr-service';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 

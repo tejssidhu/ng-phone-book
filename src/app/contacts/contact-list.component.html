@@ -2,7 +2,24 @@
     <div class="col-md-10 col-md-offset-1">
         <h2>My Contacts</h2>
 
-        <modal-confirm></modal-confirm>
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Contact?</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the contact?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">Cancel</button>
+            </div>
+        </ng-template>
+
+        <ngb-alert *ngIf="deleteMessage" [type]="deleteMessageType" (close)="deleteMessage = null">{{ deleteMessage }}</ngb-alert>
+
         <div class="table-responsive">
             <table class="table table-hover table-striped table-condensed">
                 <thead>
@@ -16,7 +33,7 @@
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let contact of contacts">
-                        <tr contact-thumbnail [contact]="contact" (confirmDelete)="deleteConfirmation($event)" [hidden]="contact.deleted"></tr>
+                        <tr contact-thumbnail [contact]="contact" (confirmDelete)="deleteConfirmation(content, $event)" [hidden]="contact.deleted"></tr>
                     </ng-container>
                 </tbody>
             </table>
