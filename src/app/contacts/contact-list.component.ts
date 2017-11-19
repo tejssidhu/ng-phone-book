@@ -16,7 +16,7 @@ export class ContactListComponent implements OnInit {
     contacts: IContact[];
     deleteMessageType: string;
 
-    constructor(private contactService: ContactService, private authService: AuthService, private modalService: NgbModal) { 
+    constructor(private contactService: ContactService, private authService: AuthService, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -35,15 +35,14 @@ export class ContactListComponent implements OnInit {
 
     deleteConfirmation(content, id: string) {
         this.modalService.open(content).result.then((result) => {
-                if (result == 'ok') {
+                if (result === 'ok') {
                     this.contactService.deleteContact(id).subscribe(
                         data => {
                             const foundContact = this.contacts.find(contact => contact.id === id);
                             foundContact.deleted = true;
-    
+
                             this.deleteMessageType = 'success';
                             this._deleteComplete.next(`Contact was deleted`);
-                            // this.toastr.success('Contact Deleted');
                         },
                         error => {
                             this.deleteMessageType = 'warning';

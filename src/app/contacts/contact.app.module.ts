@@ -4,12 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ContactListComponent,
-  // ContactDetailComponent,
+  ContactDetailComponent,
   ContactThumbnailComponent,
-  // ContactListResolver,
-  // ContactResolver,
+  ContactResolver,
   ContactService,
-  // AddContactComponent
+  AddContactComponent
 } from './index';
 
 import { contactRoutes } from './routes';
@@ -25,13 +24,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   declarations: [
     ContactListComponent,
-    // ContactDetailComponent,
+    ContactDetailComponent,
     ContactThumbnailComponent,
-    // AddContactComponent,
+    AddContactComponent,
   ],
   providers:    [
-    // ContactListResolver,
-    // ContactResolver,
+    ContactResolver,
     ContactService
   ]
 })

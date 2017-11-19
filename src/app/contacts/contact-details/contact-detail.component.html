@@ -1,0 +1,51 @@
+<form class="form-horizontal">
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Delete Contact?</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete the contact?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">Cancel</button>
+        </div>
+    </ng-template>
+
+    <ngb-alert *ngIf="deleteMessage" [type]="deleteMessageType" (close)="deleteMessage = null">{{ deleteMessage }}</ngb-alert>    
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">Title</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{contact.title}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Forename</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{contact.forename}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Surname</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{contact.surname}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Email</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{contact.email}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="button" class="btn btn-default" routerLink="/contacts">Back To List</button>
+            <button type="button" class="btn btn-primary" [routerLink]="['/contacts/edit', contact.id]">Edit</button>
+            <button type="button" class="btn btn-danger" (click)="deleteConfirmation(content, contact.id)">Delete</button>
+        </div>
+    </div>
+</form>
