@@ -2,8 +2,7 @@ import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IContact, ContactService } from '../shared/index';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {Subject} from 'rxjs/Subject';
-import {debounceTime} from 'rxjs/operator/debounceTime';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
     moduleId: module.id,
@@ -12,15 +11,12 @@ import {debounceTime} from 'rxjs/operator/debounceTime';
 
 export class ContactDetailComponent implements OnInit {
     contact: IContact;
-    private _deleteComplete = new Subject<string>();
-    deleteMessage: string;
-    deleteMessageType: string;
 
     constructor(private route: ActivatedRoute,
         private contactService: ContactService,
         private router: Router,
-        private modalService: NgbModal) {
-
+        private modalService: NgbModal,
+        private _toastr: ToastsManager) {
     }
 
     ngOnInit() {
@@ -36,11 +32,12 @@ export class ContactDetailComponent implements OnInit {
                         data => {
                             this.contact.deleted = true;
 
+                            this._toastr.success('Contact ' + this.contact.forename + ' ' + this.contact.surname + ' was deleted.');
+
                             this.router.navigate(['/contacts']);
                         },
                         error => {
-                            this.deleteMessageType = 'warning';
-                            this._deleteComplete.next(`Something went wrong`);
+                            this._toastr.error('Something went wrong: ' + error);
                         });
                 }
             }

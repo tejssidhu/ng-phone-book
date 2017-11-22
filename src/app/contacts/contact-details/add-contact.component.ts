@@ -3,8 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IContact, ContactService } from '../shared/index';
 import { AuthService } from '../../user/index';
-import {Subject} from 'rxjs/Subject';
-import {debounceTime} from 'rxjs/operator/debounceTime';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
     moduleId: module.id,
@@ -14,15 +13,12 @@ import {debounceTime} from 'rxjs/operator/debounceTime';
 export class AddContactComponent implements OnInit {
     contact: IContact;
     isNew: boolean;
-    private _deleteComplete = new Subject<string>();
-    deleteMessage: string;
-    deleteMessageType: string;
 
     constructor(private route: ActivatedRoute,
         private contactService: ContactService,
         private authService: AuthService,
-        private router: Router) {
-
+        private router: Router,
+        private _toastr: ToastsManager) {
     }
 
     ngOnInit() {
@@ -41,24 +37,20 @@ export class AddContactComponent implements OnInit {
         if (this.isNew) {
             this.contactService.createContact(this.contact).subscribe(
                 data => {
+                    this._toastr.success('Contact ' + data.forename + ' ' + data.surname + ' was created.');
                     this.router.navigate(['/contacts/contact', data.id]);
-                    this.deleteMessageType = 'success';
-                    this._deleteComplete.next(`Contact Saved`);
                 },
                 error => {
-                    this.deleteMessageType = 'warning';
-                    this._deleteComplete.next(`Something went wrong`);
+                    this._toastr.error('Something went wrong: ' + error);
                 });
         } else {
             this.contactService.updateContact(this.contact).subscribe(
                 data => {
+                    this._toastr.success('Contact ' + data.forename + ' ' + data.surname + ' was updated.');
                     this.router.navigate(['/contacts/contact', data.id]);
-                    this.deleteMessageType = 'success';
-                    this._deleteComplete.next(`Contact Updated`);
                 },
                 error => {
-                    this.deleteMessageType = 'warning';
-                    this._deleteComplete.next(`Something went wrong`);
+                    this._toastr.error('Something went wrong: ' + error);
                 });
         }
     }

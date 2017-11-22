@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IContact, ContactService } from './shared/index';
 import { AuthService } from '../user/shared/index';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {Subject} from 'rxjs/Subject';
-import {debounceTime} from 'rxjs/operator/debounceTime';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
     moduleId: module.id,
@@ -11,19 +10,16 @@ import {debounceTime} from 'rxjs/operator/debounceTime';
 })
 
 export class ContactListComponent implements OnInit {
-    private _deleteComplete = new Subject<string>();
-    deleteMessage: string;
     contacts: IContact[];
-    deleteMessageType: string;
 
-    constructor(private contactService: ContactService, private authService: AuthService, private modalService: NgbModal) {
+    constructor(private contactService: ContactService, 
+        private authService: AuthService,
+        private modalService: NgbModal,
+        private _toastr: ToastsManager) {
     }
 
     ngOnInit() {
         this.getContacts();
-
-        this._deleteComplete.subscribe((message) => this.deleteMessage = message);
-        debounceTime.call(this._deleteComplete, 3000).subscribe(() => this.deleteMessage = null);
     }
 
     getContacts() {
@@ -41,12 +37,10 @@ export class ContactListComponent implements OnInit {
                             const foundContact = this.contacts.find(contact => contact.id === id);
                             foundContact.deleted = true;
 
-                            this.deleteMessageType = 'success';
-                            this._deleteComplete.next(`Contact was deleted`);
+                            this._toastr.success('Contact ' + foundContact.forename + ' ' + foundContact.surname + ' was deleted.');
                         },
                         error => {
-                            this.deleteMessageType = 'warning';
-                            this._deleteComplete.next(`Something went wrong`);
+                            this._toastr.error('Something went wrong: ' + error);
                         });
                 }
             }
