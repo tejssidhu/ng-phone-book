@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IContact, ContactService } from './shared/index';
 import { AuthService } from '../user/shared/index';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
@@ -12,7 +12,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class ContactListComponent implements OnInit {
     contacts: IContact[];
 
-    constructor(private contactService: ContactService, 
+    constructor(private contactService: ContactService,
         private authService: AuthService,
         private modalService: NgbModal,
         private _toastr: ToastsManager) {

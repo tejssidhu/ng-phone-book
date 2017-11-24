@@ -4,7 +4,7 @@ import { AuthService } from '../user/shared/auth-service';
 
 @Component({
     moduleId: module.id,
-    selector: 'nav-bar',
+    selector: 'app-navbar',
     templateUrl: 'navbar.component.html'
 })
 export class NavBarComponent {

@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent, AuthService } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
-import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import { ToastModule} from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';

@@ -5,7 +5,7 @@ import { ToastsManager } from 'ng2-toastr';
   moduleId: module.id,
   selector: 'app-root',
   template: `
-  <nav-bar></nav-bar>
+  <app-navbar></app-navbar>
   <div class="contatiner">
     <router-outlet></router-outlet>
   </div>
