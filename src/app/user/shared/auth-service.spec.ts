@@ -11,8 +11,8 @@ describe('AuthService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        providers: [AuthService]
+            imports: [HttpClientTestingModule],
+            providers: [AuthService]
         });
         injector = getTestBed();
         service = injector.get(AuthService);

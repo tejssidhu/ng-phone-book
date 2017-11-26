@@ -32,7 +32,6 @@ export class ContactService {
             catchError(this.handleError<any>('getContact'))
         );
     }
-    // return <IContact>response.json();
 
     createContact(contact: IContact): Observable<IContact> {
         return this.http.post<IContact>(myGlobals.serviceRootUrl + 'Contacts', JSON.stringify(contact), httpOptions).pipe(
@@ -40,8 +39,6 @@ export class ContactService {
             catchError(this.handleError<any>('createContact'))
         );
     }
-    // let contact = <IContact>response.json();
-    // return contact;
 
     updateContact(contact: IContact): Observable<IContact> {
         return this.http.put(myGlobals.serviceRootUrl + 'Contacts(' + contact.id + ')', JSON.stringify(contact), httpOptions).pipe(
@@ -49,17 +46,13 @@ export class ContactService {
             catchError(this.handleError<any>('createContact'))
         );
     }
-    // let contact = <IContact>response.json();
-    // return contact;
 
     deleteContact(id: string): Observable<string> {
         return this.http.delete(myGlobals.serviceRootUrl + 'Contacts(' + id + ')').pipe(
-            tap((response: string) => console.log(`contact updated: userId=${response}`)),
+            tap((response: string) => console.log(`contact deleted: userId=${response}`)),
             catchError(this.handleError<any>('createContact'))
         );
     }
-    // let status = response.status;
-    // return status;
 
     /**
      * Handle Http operation that failed.
