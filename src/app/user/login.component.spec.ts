@@ -18,6 +18,7 @@ describe('LoginComponent', () => {
     let logOutCalled: Boolean;
     let loginUserCalled: Boolean;
     let navigateCalled: Boolean;
+    const store = {};
 
     class MockRouter {
         navigate(path: string) { navigateCalled = true; return path; }
@@ -66,6 +67,16 @@ describe('LoginComponent', () => {
 
         authService = TestBed.get(AuthService);
         router = TestBed.get(Router);
+
+        spyOn(localStorage, 'getItem').and.callFake(function (key) {
+            return store[key];
+        });
+        spyOn(localStorage, 'setItem').and.callFake(function (key, value) {
+            return store[key] = value + '';
+        });
+        spyOn(localStorage, 'removeItem').and.callFake(function (key, value) {
+            delete store[key];
+        });
     });
     it('should create the app', async(() => {
         const de = fixture.debugElement.componentInstance;
@@ -101,48 +112,65 @@ describe('LoginComponent', () => {
         form.triggerEventHandler('submit', null);
         expect(loginUserCalled).toEqual(true);
     }));
-    it(`should have set loginInvalid and display warning message when loginUser doesnt return a user`, fakeAsync(() => {
-        authService.loginUser = function() {
-            return Observable.of(null);
-        };
-        const comp = fixture.debugElement.componentInstance;
-        comp.login();
 
-        tick();
+    describe('#login', () => {
+        it(`should have set loginInvalid and display warning message when loginUser doesnt return a user`, fakeAsync(() => {
+            authService.loginUser = function() {
+                return Observable.of(null);
+            };
+            const comp = fixture.debugElement.componentInstance;
+            comp.login();
 
-        fixture.detectChanges();
-        expect(comp.loginInvalid).toEqual(true);
+            tick();
 
-        const de = fixture.debugElement.query(By.css('.bg-danger'));
-        expect(de).toBeTruthy();
-    }));
-    it(`should navigate to contacts route when loginUser returns a user`, fakeAsync(() => {
-        authService.loginUser = function() {
+            fixture.detectChanges();
+            expect(comp.loginInvalid).toEqual(true);
+
+            const de = fixture.debugElement.query(By.css('.bg-danger'));
+            expect(de).toBeTruthy();
+        }));
+        it(`should navigate to contacts route when loginUser returns a user`, fakeAsync(() => {
+            authService.loginUser = function() {
+                const user: IUser = { id: 'id', username: 'username' };
+                return Observable.of(user);
+            };
+            const comp = fixture.debugElement.componentInstance;
+            comp.login();
+
+            tick();
+
+            fixture.detectChanges();
+            expect(comp.loginInvalid).toEqual(false);
+            expect(navigateCalled).toEqual(true);
+        }));
+        it(`should set currentUser item in localstorage when loginUser returns a user`, fakeAsync(() => {
             const user: IUser = { id: 'id', username: 'username' };
-            return Observable.of(user);
-        };
-        const comp = fixture.debugElement.componentInstance;
-        comp.login();
 
-        tick();
+            authService.loginUser = function() {
+                return Observable.of(user);
+            };
+            const comp = fixture.debugElement.componentInstance;
+            comp.login();
 
-        fixture.detectChanges();
-        expect(comp.loginInvalid).toEqual(false);
-        expect(navigateCalled).toEqual(true);
-    }));
-    it(`should have set loginInvalid and display warning message when loginUser throws an error`, fakeAsync(() => {
-        authService.loginUser = function() {
-            return Observable.throw('error occured');
-        };
-        const comp = fixture.debugElement.componentInstance;
-        comp.login();
+            tick();
 
-        tick();
+            fixture.detectChanges();
+            expect(localStorage.getItem('currentUser')).toEqual(JSON.stringify(user));
+        }));
+        it(`should have set loginInvalid and display warning message when loginUser throws an error`, fakeAsync(() => {
+            authService.loginUser = function() {
+                return Observable.throw('error occured');
+            };
+            const comp = fixture.debugElement.componentInstance;
+            comp.login();
 
-        fixture.detectChanges();
-        expect(comp.loginInvalid).toEqual(true);
+            tick();
 
-        const de = fixture.debugElement.query(By.css('.bg-danger'));
-        expect(de).toBeTruthy();
-    }));
+            fixture.detectChanges();
+            expect(comp.loginInvalid).toEqual(true);
+
+            const de = fixture.debugElement.query(By.css('.bg-danger'));
+            expect(de).toBeTruthy();
+        }));
+    });
 });
