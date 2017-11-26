@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
             },
             error => {
                 this.loginInvalid = true;
-            });
+            }
+        );
     }
 }
