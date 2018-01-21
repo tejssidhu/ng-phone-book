@@ -1,0 +1,155 @@
+import { ComponentFixture, TestBed, async, fakeAsync, tick, getTestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { DebugElement, Component } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+// import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+import { ContactListComponent, ContactService, IContact, ContactThumbnailComponent } from './index';
+import { AuthService } from '../user/index';
+import * as myGlobals from '../shared/globals';
+// import { ModalComponent } from '../shared/modal-component';
+import { MockThumbnailDirective } from './mock-thumbnail.directive';
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap/modal/modal';
+
+describe('ContactListComponent', () => {
+    let fixture: ComponentFixture<ContactListComponent>;
+    let injector: TestBed;
+    let contactServiceGetContactsCalled: Boolean;
+    let contactServicedeleteContactCalled: Boolean;
+    let authUserGetUserIdCalled: Boolean;
+    let modalServiceOpenCalled: Boolean;
+    let modalServiceContent: string;
+    let toastrSuccessCalled: Boolean;
+    let toastrErrorCalled: Boolean;
+    // let modalService: NgbModal;
+    // let httpMock: HttpTestingController;
+    const store = {};
+    const contact1: IContact = { id: 'id1', userId: 'userId1', title: 'title1', forename: 'forename1', surname: 'surname1', email: 'email1', deleted: false };
+    const contact2: IContact = { id: 'id2', userId: 'userId2', title: 'title2', forename: 'forename2', surname: 'surname2', email: 'email2', deleted: false };
+    const contacts: IContact[] = [contact1, contact2];
+
+    beforeEach(() => {
+        const authServiceStub = {
+            getUserId: function() {
+                authUserGetUserIdCalled = true;
+                return 1;
+            }
+        };
+        const contactServiceStub = {
+            getContacts: function() {
+                contactServiceGetContactsCalled = true;
+
+                return Observable.of(contacts);
+            },
+            deleteContact: function() {
+                contactServicedeleteContactCalled = true;
+            }
+        };
+        const modalCompStub = {
+            open: function(content) {
+                modalServiceContent = content;
+                modalServiceOpenCalled = true;
+
+                return {
+                    result: {
+                        then: function() {
+                            return 'ok';
+                        }
+                    }
+                };
+            }
+        };
+        const toastrStub = {
+            success: function() {
+                toastrSuccessCalled = true;
+            },
+            error: function() {
+                toastrErrorCalled = true;
+            }
+        };
+
+        TestBed.configureTestingModule({
+            declarations: [
+                ContactListComponent,
+                MockThumbnailDirective
+            ],
+            imports: [
+                RouterTestingModule
+            ],
+            providers: [
+                {
+                    provide: AuthService,
+                    useValue: authServiceStub
+                },
+                {
+                    provide: ContactService,
+                    useValue: contactServiceStub
+                },
+                {
+                    provide: NgbModal,
+                    useValue: modalCompStub
+                },
+                {
+                    provide: ToastsManager,
+                    useValue: toastrStub
+                }
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(ContactListComponent);
+        injector = getTestBed();
+
+        // modalService = TestBed.get(NgbModal);
+        // httpMock = injector.get(HttpTestingController);
+    });
+    it('should create the app', async(() => {
+        const de = fixture.debugElement.componentInstance;
+        expect(de).toBeTruthy();
+    }));
+    describe('#getContact', () => {
+        it(`should call auth service getUserId and contact service getContacts`, fakeAsync(() => {
+            const comp = fixture.debugElement.componentInstance;
+            comp.getContacts();
+            comp.contacts = contacts;
+
+            tick();
+
+            fixture.detectChanges();
+            expect(authUserGetUserIdCalled).toEqual(true);
+            expect(contactServiceGetContactsCalled).toEqual(true);
+        }));
+    });
+    describe('#deleteConfirmation', () => {
+        it(`should call modal service open`, fakeAsync(() => {
+            const comp = fixture.debugElement.componentInstance;
+            const content = 'content';
+            const id = 'id';
+            comp.deleteConfirmation(content, id);
+
+            tick();
+
+            fixture.detectChanges();
+            expect(modalServiceOpenCalled).toEqual(true);
+            expect(modalServiceContent).toEqual(content);
+        }));
+        it(`should call modal service open and if ok is returned then deleteContact on contact service is called`, fakeAsync(() => {
+            const comp = fixture.debugElement.componentInstance;
+            const content = 'content';
+            const id = 'id';
+            comp.deleteConfirmation(content, id);
+
+            tick();
+
+            fixture.detectChanges();
+            expect(modalServiceOpenCalled).toEqual(true);
+            expect(modalServiceContent).toEqual(content);
+            expect(contactServicedeleteContactCalled).toEqual(true);
+        }));
+    });
+});
