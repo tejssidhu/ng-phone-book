@@ -5,15 +5,12 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DebugElement, Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-// import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { ContactListComponent, ContactService, IContact, ContactThumbnailComponent } from './index';
 import { AuthService } from '../user/index';
 import * as myGlobals from '../shared/globals';
-// import { ModalComponent } from '../shared/modal-component';
 import { MockThumbnailDirective } from './mock-thumbnail.directive';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 
@@ -27,8 +24,6 @@ describe('ContactListComponent', () => {
     let modalServiceContent: string;
     let toastrSuccessCalled: Boolean;
     let toastrErrorCalled: Boolean;
-    // let modalService: NgbModal;
-    // let httpMock: HttpTestingController;
     const store = {};
     const contact1: IContact = { id: 'id1', userId: 'userId1', title: 'title1', forename: 'forename1', surname: 'surname1', email: 'email1', deleted: false };
     const contact2: IContact = { id: 'id2', userId: 'userId2', title: 'title2', forename: 'forename2', surname: 'surname2', email: 'email2', deleted: false };
@@ -104,9 +99,6 @@ describe('ContactListComponent', () => {
 
         fixture = TestBed.createComponent(ContactListComponent);
         injector = getTestBed();
-
-        // modalService = TestBed.get(NgbModal);
-        // httpMock = injector.get(HttpTestingController);
     });
     it('should create the app', async(() => {
         const de = fixture.debugElement.componentInstance;
