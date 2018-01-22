@@ -25,6 +25,9 @@ describe('AddContactComponent', () => {
     let authUserGetUserIdCalled: Boolean;
     let navigateCalled: Boolean;
     let activatedRoute: ActivatedRoute;
+    let contactService: ContactService;
+    let contactToSave: IContact;
+    let throwError: Boolean;
     const dataElement: any = {
         title: '',
         forename: '',
@@ -43,11 +46,23 @@ describe('AddContactComponent', () => {
             }
         };
         const contactServiceStub = {
-            createContact: function() {
+            createContact: function(contact: IContact) {
+                contactToSave = contact;
                 contactServiceCreateContactCalled = true;
+
+                if (throwError) {
+                    return Observable.throw('error occured');
+                }
+                return {subscribe: () => {}}
             },
-            updateContact: function() {
+            updateContact: function(contact: IContact) {
+                contactToSave = contact;
                 contactServiceUpdateContactCalled = true;
+
+                if (throwError) {
+                    return Observable.throw('error occured');
+                }
+                return {subscribe: () => {}}
             }
         };
         const toastrStub = {
@@ -96,6 +111,7 @@ describe('AddContactComponent', () => {
 
         fixture = TestBed.createComponent(AddContactComponent);
         activatedRoute = TestBed.get(ActivatedRoute);
+        contactService = TestBed.get(ContactService);
 
         injector = getTestBed();
     });
@@ -103,6 +119,71 @@ describe('AddContactComponent', () => {
         const de = fixture.debugElement.componentInstance;
         expect(de).toBeTruthy();
     }));
+    describe('page Elements', () => {
+        it(`should contain form with correct elements for a new contact`, fakeAsync(() => {
+            activatedRoute.data = Observable.of(dataElement);
+            comp = fixture.componentInstance;
+            comp.isNew = true;
+
+            tick();
+            fixture.detectChanges();
+            tick();
+
+            let deEl = fixture.debugElement.query(By.css('input#title'));
+            let el = deEl.nativeElement;
+            expect(el.textContent).toEqual('');
+
+            deEl = fixture.debugElement.query(By.css('input#forename'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual('');
+
+            deEl = fixture.debugElement.query(By.css('input#surname'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual('');
+
+            deEl = fixture.debugElement.query(By.css('input#email'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual('');
+
+            let deEls = fixture.debugElement.queryAll(By.css('button'));
+            el = deEls[0].nativeElement;
+            expect(el.textContent).toEqual('Save');
+            el = deEls[1].nativeElement;
+            expect(el.textContent).toEqual('Cancel');
+        }));
+        xit(`should contain form with correct elements for an existing contact`, fakeAsync(() => {
+            comp = fixture.componentInstance;
+            const returnElement = {
+                'contact': {
+                        title: contact1.title,
+                        forename: contact1.forename,
+                        surname: contact1.surname,
+                        email: contact1.email
+                }
+            };
+            activatedRoute.data = Observable.of(returnElement);
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+
+            let deEl = fixture.debugElement.query(By.css('input#title'));
+            let el = deEl.nativeElement;
+            expect(el.textContent).toEqual(contact1.title);
+
+            deEl = fixture.debugElement.query(By.css('input#forename'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual(contact1.forename);
+
+            deEl = fixture.debugElement.query(By.css('input#surname'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual(contact1.surname);
+
+            deEl = fixture.debugElement.query(By.css('input#email'));
+            el = deEl.nativeElement;
+            expect(el.textContent).toEqual(contact1.email);
+        }));
+    });
     describe('for new contact', () => {
         it(`should have set isNew to true and contact is set correctly`, fakeAsync(() => {
             activatedRoute.data = Observable.of(dataElement);
@@ -139,7 +220,86 @@ describe('AddContactComponent', () => {
             expect(comp.contact.surname).toEqual('surname');
         }));
     });
-    xdescribe('save contact', () => {
+    describe('save contact', () => {
+        it(`should call createContact with correct data when a new contact is saved`, fakeAsync(() => {
+            comp = fixture.componentInstance;
+            comp.isNew = true;
+            comp.contact = contact1;
 
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+            
+            expect(contactServiceCreateContactCalled).toEqual(true);
+            expect(contactToSave).toEqual(contact1);
+        }));
+        it(`should call updateContact when an existing contact is saved`, fakeAsync(() => {
+            comp = fixture.componentInstance;
+            comp.isNew = false;
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+
+            expect(contactServiceUpdateContactCalled).toEqual(true);
+            expect(contactToSave).toEqual(contact1);
+        }));
+        it(`should call toastr success and navigate to the correct page when createContact saves a new contact`, fakeAsync(() => {
+            contactService.createContact = function() {
+                return Observable.of(contact1);
+            };
+            comp = fixture.componentInstance;
+            comp.isNew = true;
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+            
+            expect(toastrSuccessCalled).toEqual(true);
+            expect(navigateCalled).toEqual(true);
+        }));
+        it(`should call toastr success and navigate to the correct page when createContact saves an existing contact`, fakeAsync(() => {
+            contactService.updateContact = function() {
+                return Observable.of(contact1);
+            };
+            comp = fixture.componentInstance;
+            comp.isNew = false;
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+            
+            expect(toastrSuccessCalled).toEqual(true);
+            expect(navigateCalled).toEqual(true);
+        }));
+        it(`should call toastr error when an error occurs during saving a new contact`, fakeAsync(() => {
+            throwError = true;
+
+            comp = fixture.componentInstance;
+            comp.isNew = true;
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+
+            expect(toastrErrorCalled).toEqual(true);
+        }));
+        it(`should call toastr error when an error occurs during saving an existing contact`, fakeAsync(() => {
+            throwError = true;
+
+            comp = fixture.componentInstance;
+            comp.isNew = false;
+            comp.contact = contact1;
+
+            tick();
+            fixture.detectChanges();
+            comp.saveContact();
+
+            expect(toastrErrorCalled).toEqual(true);
+        }));
     });
 });
