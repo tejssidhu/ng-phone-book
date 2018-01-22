@@ -53,7 +53,7 @@ describe('AddContactComponent', () => {
                 if (throwError) {
                     return Observable.throw('error occured');
                 }
-                return {subscribe: () => {}}
+                return {subscribe: () => {} };
             },
             updateContact: function(contact: IContact) {
                 contactToSave = contact;
@@ -62,7 +62,7 @@ describe('AddContactComponent', () => {
                 if (throwError) {
                     return Observable.throw('error occured');
                 }
-                return {subscribe: () => {}}
+                return {subscribe: () => {} };
             }
         };
         const toastrStub = {
@@ -145,7 +145,7 @@ describe('AddContactComponent', () => {
             el = deEl.nativeElement;
             expect(el.textContent).toEqual('');
 
-            let deEls = fixture.debugElement.queryAll(By.css('button'));
+            const deEls = fixture.debugElement.queryAll(By.css('button'));
             el = deEls[0].nativeElement;
             expect(el.textContent).toEqual('Save');
             el = deEls[1].nativeElement;
@@ -229,7 +229,7 @@ describe('AddContactComponent', () => {
             tick();
             fixture.detectChanges();
             comp.saveContact();
-            
+
             expect(contactServiceCreateContactCalled).toEqual(true);
             expect(contactToSave).toEqual(contact1);
         }));
@@ -256,7 +256,7 @@ describe('AddContactComponent', () => {
             tick();
             fixture.detectChanges();
             comp.saveContact();
-            
+
             expect(toastrSuccessCalled).toEqual(true);
             expect(navigateCalled).toEqual(true);
         }));
@@ -271,7 +271,7 @@ describe('AddContactComponent', () => {
             tick();
             fixture.detectChanges();
             comp.saveContact();
-            
+
             expect(toastrSuccessCalled).toEqual(true);
             expect(navigateCalled).toEqual(true);
         }));
