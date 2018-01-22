@@ -38,7 +38,7 @@ describe('AddContactComponent', () => {
         navigate(path: string) { navigateCalled = true; return path; }
     }
 
-    beforeEach(() => {
+    beforeEach(async(() => {
         const authServiceStub = {
             getUserId: function() {
                 authUserGetUserIdCalled = true;
@@ -108,7 +108,8 @@ describe('AddContactComponent', () => {
                 }
             ]
         }).compileComponents();
-
+    }));
+    beforeEach(() => {
         fixture = TestBed.createComponent(AddContactComponent);
         activatedRoute = TestBed.get(ActivatedRoute);
         contactService = TestBed.get(ContactService);
@@ -127,7 +128,6 @@ describe('AddContactComponent', () => {
 
             tick();
             fixture.detectChanges();
-            tick();
 
             let deEl = fixture.debugElement.query(By.css('input#title'));
             let el = deEl.nativeElement;

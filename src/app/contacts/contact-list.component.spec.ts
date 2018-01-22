@@ -24,6 +24,8 @@ describe('ContactListComponent', () => {
     let modalServiceContent: string;
     let toastrSuccessCalled: Boolean;
     let toastrErrorCalled: Boolean;
+    let modalService: NgbModal;
+    let contactService: ContactService;
     const store = {};
     const contact1: IContact = { id: 'id1', userId: 'userId1', title: 'title1', forename: 'forename1', surname: 'surname1', email: 'email1', deleted: false };
     const contact2: IContact = { id: 'id2', userId: 'userId2', title: 'title2', forename: 'forename2', surname: 'surname2', email: 'email2', deleted: false };
@@ -98,6 +100,10 @@ describe('ContactListComponent', () => {
         }).compileComponents();
 
         fixture = TestBed.createComponent(ContactListComponent);
+
+        modalService = TestBed.get(NgbModal);
+        contactService = TestBed.get(ContactService);
+
         injector = getTestBed();
     });
     it('should create the app', async(() => {
@@ -153,18 +159,53 @@ describe('ContactListComponent', () => {
             expect(modalServiceOpenCalled).toEqual(true);
             expect(modalServiceContent).toEqual(content);
         }));
-        xit(`should call modal service open and if ok is returned then deleteContact on contact service is called`, fakeAsync(() => {
+        it(`should call modal service open and if ok is returned then deleteContact on contact service is called`, fakeAsync(() => {
             const comp = fixture.debugElement.componentInstance;
             const content = 'content';
-            const id = 'id';
+            const id = 'id1';
+            let spy = spyOn(modalService, 'open').and.returnValue(
+                {
+                    result: Promise.resolve('ok')
+                }
+            );
+            contactService.deleteContact = function() {
+                contactServicedeleteContactCalled = true;
+
+                return Observable.of('id1');
+            };
+            
             comp.deleteConfirmation(content, id);
 
+            fixture.detectChanges();
             tick();
+            fixture.detectChanges();
+            
+            expect(contactServicedeleteContactCalled).toEqual(true);
+            expect(contacts.find(contact => contact.id === 'id1').deleted).toEqual(true);
+            expect(toastrSuccessCalled).toEqual(true);
+        }));
+        it(`should call toastr error if delete contact throws exception`, fakeAsync(() => {
+            const comp = fixture.debugElement.componentInstance;
+            const content = 'content';
+            const id = 'id1';
+            let spy = spyOn(modalService, 'open').and.returnValue(
+                {
+                    result: Promise.resolve('ok')
+                }
+            );
+            contactService.deleteContact = function() {
+                contactServicedeleteContactCalled = true;
+
+                return Observable.throw('error occured');
+            };
+            
+            comp.deleteConfirmation(content, id);
 
             fixture.detectChanges();
-            expect(modalServiceOpenCalled).toEqual(true);
-            expect(modalServiceContent).toEqual(content);
-            expect(contactServicedeleteContactCalled).toEqual(true);
+            tick();
+            fixture.detectChanges();
+            
+            expect(toastrErrorCalled).toEqual(true);
         }));
     });
 });

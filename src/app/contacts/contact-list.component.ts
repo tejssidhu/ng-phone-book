@@ -30,7 +30,7 @@ export class ContactListComponent implements OnInit {
     }
 
     deleteConfirmation(content, id: string) {
-        this.modalService.open(content).result.then((result) => {
+        this.modalService.open(content).result.then(result => {
                 if (result === 'ok') {
                     this.contactService.deleteContact(id).subscribe(
                         data => {
