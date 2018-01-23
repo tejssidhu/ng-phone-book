@@ -29,11 +29,9 @@ describe('ContactDetailComponent', () => {
     let contactIdToDelete: string;
     let throwError: Boolean;
     let modalService: NgbModal;
+    
     const dataElement: any = {
-        id: '',
-        title: '',
-        forename: '',
-        surname: ''
+        'contact': contact1
     };
 
     class MockRouter {
@@ -122,16 +120,16 @@ describe('ContactDetailComponent', () => {
         expect(de).toBeTruthy();
     }));
     describe('on initialisation', () => {
-        xit(`should have set contact correctly`, fakeAsync(() => {
-            activatedRoute.data = Observable.of([dataElement]);
+        it(`should have set contact correctly`, fakeAsync(() => {
+            activatedRoute.data = Observable.of(dataElement);
             comp = fixture.componentInstance;
 
             tick();
             fixture.detectChanges();
 
-            expect(comp.contact.title).toEqual('');
-            expect(comp.contact.forename).toEqual('');
-            expect(comp.contact.surname).toEqual('');
+            expect(comp.contact.title).toEqual('title1');
+            expect(comp.contact.forename).toEqual('forename1');
+            expect(comp.contact.surname).toEqual('surname1');
         }));
     });
 });

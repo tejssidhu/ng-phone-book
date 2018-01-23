@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, tick, inject } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -129,7 +129,7 @@ describe('LoginComponent', () => {
             const de = fixture.debugElement.query(By.css('.bg-danger'));
             expect(de).toBeTruthy();
         }));
-        it(`should navigate to contacts route when loginUser returns a user`, fakeAsync(() => {
+        it(`should navigate to a route when loginUser returns a user`, fakeAsync(() => {
             authService.loginUser = function() {
                 const user: IUser = { id: 'id', username: 'username' };
                 return Observable.of(user);
@@ -142,6 +142,22 @@ describe('LoginComponent', () => {
             fixture.detectChanges();
             expect(comp.loginInvalid).toEqual(false);
             expect(navigateCalled).toEqual(true);
+        }));
+        it('should navigate to contacts route', inject([Router], (router: Router) => {
+            const spy = spyOn(router, 'navigate');
+            authService.loginUser = function() {
+                const user: IUser = { id: 'id', username: 'username' };
+                return Observable.of(user);
+            };
+            const comp = fixture.debugElement.componentInstance;
+
+            comp.login();
+            
+            fixture.detectChanges();
+
+            const navArgs = spy.calls.first().args[0];
+
+            expect(navArgs[0]).toBe('contacts', 'should nav to contacts');
         }));
         it(`should set currentUser item in localstorage when loginUser returns a user`, fakeAsync(() => {
             const user: IUser = { id: 'id', username: 'username' };

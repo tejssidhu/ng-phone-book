@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async, fakeAsync, tick, getTestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, tick, getTestBed, inject } from '@angular/core/testing';
 import { AddContactComponent } from './index';
 import { IContact, ContactService } from '../index';
 import { AuthService } from '../../user/index';
@@ -131,19 +131,19 @@ describe('AddContactComponent', () => {
 
             let deEl = fixture.debugElement.query(By.css('input#title'));
             let el = deEl.nativeElement;
-            expect(el.textContent).toEqual('');
+            expect(el.value).toEqual('');
 
             deEl = fixture.debugElement.query(By.css('input#forename'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual('');
+            expect(el.value).toEqual('');
 
             deEl = fixture.debugElement.query(By.css('input#surname'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual('');
+            expect(el.value).toEqual('');
 
             deEl = fixture.debugElement.query(By.css('input#email'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual('');
+            expect(el.value).toEqual('');
 
             const deEls = fixture.debugElement.queryAll(By.css('button'));
             el = deEls[0].nativeElement;
@@ -151,7 +151,7 @@ describe('AddContactComponent', () => {
             el = deEls[1].nativeElement;
             expect(el.textContent).toEqual('Cancel');
         }));
-        xit(`should contain form with correct elements for an existing contact`, fakeAsync(() => {
+        it(`should contain form with correct elements for an existing contact`, fakeAsync(() => {
             comp = fixture.componentInstance;
             const returnElement = {
                 'contact': {
@@ -162,26 +162,26 @@ describe('AddContactComponent', () => {
                 }
             };
             activatedRoute.data = Observable.of(returnElement);
-            comp.contact = contact1;
-
+            
+            fixture.detectChanges();
             tick();
             fixture.detectChanges();
-
+            
             let deEl = fixture.debugElement.query(By.css('input#title'));
             let el = deEl.nativeElement;
-            expect(el.textContent).toEqual(contact1.title);
+            expect(el.value).toEqual(contact1.title);
 
             deEl = fixture.debugElement.query(By.css('input#forename'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual(contact1.forename);
+            expect(el.value).toEqual(contact1.forename);
 
             deEl = fixture.debugElement.query(By.css('input#surname'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual(contact1.surname);
+            expect(el.value).toEqual(contact1.surname);
 
             deEl = fixture.debugElement.query(By.css('input#email'));
             el = deEl.nativeElement;
-            expect(el.textContent).toEqual(contact1.email);
+            expect(el.value).toEqual(contact1.email);
         }));
     });
     describe('for new contact', () => {
@@ -245,7 +245,7 @@ describe('AddContactComponent', () => {
             expect(contactServiceUpdateContactCalled).toEqual(true);
             expect(contactToSave).toEqual(contact1);
         }));
-        it(`should call toastr success and navigate to the correct page when createContact saves a new contact`, fakeAsync(() => {
+        it(`should call toastr success and router navigate when createContact saves a new contact`, fakeAsync(() => {
             contactService.createContact = function() {
                 return Observable.of(contact1);
             };
@@ -260,7 +260,7 @@ describe('AddContactComponent', () => {
             expect(toastrSuccessCalled).toEqual(true);
             expect(navigateCalled).toEqual(true);
         }));
-        it(`should call toastr success and navigate to the correct page when createContact saves an existing contact`, fakeAsync(() => {
+        it(`should call toastr success and router navigate when createContact saves an existing contact`, fakeAsync(() => {
             contactService.updateContact = function() {
                 return Observable.of(contact1);
             };
@@ -274,6 +274,40 @@ describe('AddContactComponent', () => {
 
             expect(toastrSuccessCalled).toEqual(true);
             expect(navigateCalled).toEqual(true);
+        }));
+        it('should navigate to contacts route when saving a new contact', inject([Router], (router: Router) => {
+            const spy = spyOn(router, 'navigate');
+            contactService.createContact = function() {
+                return Observable.of(contact1);
+            };
+            comp = fixture.componentInstance;
+            comp.isNew = true;
+            comp.contact = contact1;
+
+            fixture.detectChanges();
+            comp.saveContact();
+
+            const navArgs = spy.calls.first().args[0];
+
+            expect(navArgs[0]).toBe('/contacts/contact', 'should nav to contact detail component');
+            expect(navArgs[1]).toBe(contact1.id, 'should nav to contact detail component with correct id');
+        }));
+        it('should navigate to contacts route when saving an existing contact', inject([Router], (router: Router) => {
+            const spy = spyOn(router, 'navigate');
+            contactService.updateContact = function() {
+                return Observable.of(contact1);
+            };
+            comp = fixture.componentInstance;
+            comp.isNew = false;
+            comp.contact = contact1;
+
+            fixture.detectChanges();
+            comp.saveContact();
+
+            const navArgs = spy.calls.first().args[0];
+
+            expect(navArgs[0]).toBe('/contacts/contact', 'should nav to contact detail component');
+            expect(navArgs[1]).toBe(contact1.id, 'should nav to contact detail component with correct id');
         }));
         it(`should call toastr error when an error occurs during saving a new contact`, fakeAsync(() => {
             throwError = true;
