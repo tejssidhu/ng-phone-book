@@ -29,7 +29,7 @@ describe('ContactDetailComponent', () => {
     let contactIdToDelete: string;
     let throwError: Boolean;
     let modalService: NgbModal;
-    
+
     const dataElement: any = {
         'contact': contact1
     };
@@ -112,6 +112,7 @@ describe('ContactDetailComponent', () => {
         fixture = TestBed.createComponent(ContactDetailComponent);
         activatedRoute = TestBed.get(ActivatedRoute);
         contactService = TestBed.get(ContactService);
+        modalService = TestBed.get(NgbModal);
 
         injector = getTestBed();
     });
@@ -130,6 +131,90 @@ describe('ContactDetailComponent', () => {
             expect(comp.contact.title).toEqual('title1');
             expect(comp.contact.forename).toEqual('forename1');
             expect(comp.contact.surname).toEqual('surname1');
+        }));
+    });
+    describe('deleteConfirmation', () => {
+        it(`should open modal when is delete is clicked`, async(() => {
+            activatedRoute.data = Observable.of(dataElement);
+            fixture.detectChanges();
+
+            const deEls = fixture.debugElement.queryAll(By.css('button'));
+            expect(deEls[2].nativeElement.textContent).toEqual('Delete');
+            const delBtn = deEls[2];
+            delBtn.triggerEventHandler('click', null);
+
+            expect(modalServiceOpenCalled).toEqual(true);
+        }));
+        it(`should call delete contact on contact service when ok is returned from the modal`, fakeAsync(() => {
+            activatedRoute.data = Observable.of(dataElement);
+            const spy = spyOn(modalService, 'open').and.returnValue(
+                {
+                    result: Promise.resolve('ok')
+                }
+            );
+            fixture.detectChanges();
+
+            const deEls = fixture.debugElement.queryAll(By.css('button'));
+            expect(deEls[2].nativeElement.textContent).toEqual('Delete');
+            const delBtn = deEls[2];
+            delBtn.triggerEventHandler('click', null);
+
+            expect(modalServiceOpenCalled).toEqual(true);
+            tick();
+            fixture.detectChanges();
+            expect(contactServiceDeleteContactCalled).toEqual(true);
+        }));
+        it(`should call navigate and toastr success when delete contact is successful`, fakeAsync(() => {
+            activatedRoute.data = Observable.of(dataElement);
+            const spy = spyOn(modalService, 'open').and.returnValue(
+                {
+                    result: Promise.resolve('ok')
+                }
+            );
+            contactService.deleteContact = function() {
+                contactServiceDeleteContactCalled = true;
+
+                return Observable.of('id1');
+            };
+            fixture.detectChanges();
+
+            const deEls = fixture.debugElement.queryAll(By.css('button'));
+            expect(deEls[2].nativeElement.textContent).toEqual('Delete');
+            const delBtn = deEls[2];
+            delBtn.triggerEventHandler('click', null);
+
+            expect(modalServiceOpenCalled).toEqual(true);
+            tick();
+            fixture.detectChanges();
+            expect(contactServiceDeleteContactCalled).toEqual(true);
+            expect(toastrSuccessCalled).toEqual(true);
+            expect(navigateCalled).toEqual(true);
+            expect(contact1.deleted).toEqual(true);
+        }));
+        it(`should call navigate and toastr error when delete contact throws an error`, fakeAsync(() => {
+            activatedRoute.data = Observable.of(dataElement);
+            const spy = spyOn(modalService, 'open').and.returnValue(
+                {
+                    result: Promise.resolve('ok')
+                }
+            );
+            contactService.deleteContact = function() {
+                contactServiceDeleteContactCalled = true;
+
+                return Observable.throw('error occured');
+            };
+            fixture.detectChanges();
+
+            const deEls = fixture.debugElement.queryAll(By.css('button'));
+            expect(deEls[2].nativeElement.textContent).toEqual('Delete');
+            const delBtn = deEls[2];
+            delBtn.triggerEventHandler('click', null);
+
+            expect(modalServiceOpenCalled).toEqual(true);
+            tick();
+            fixture.detectChanges();
+            expect(contactServiceDeleteContactCalled).toEqual(true);
+            expect(toastrErrorCalled).toEqual(true);
         }));
     });
 });
