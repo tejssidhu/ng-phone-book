@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IContact, ContactService } from '../shared/index';
-import { AuthService } from '../../user/index';
+import { AuthService } from '../../common/services/auth.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
@@ -27,7 +27,7 @@ export class AddContactComponent implements OnInit {
                 this.contact = data['contact'];
                 this.isNew = false;
             } else {
-                this.contact = <IContact>{ title: '', forename: '', surname: '', email: '', userId: this.authService.getUserId() };
+                this.contact = <IContact>{ title: '', forename: '', surname: '', email: '', userId: this.authService.currentUser.profile.sub };
                 this.isNew = true;
             }
         });

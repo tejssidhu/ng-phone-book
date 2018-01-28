@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // import { ContactService } from '../contacts/index';
-import { AuthService } from '../user/shared/auth-service';
+// import { AuthService } from '../common/services/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -9,7 +9,8 @@ import { AuthService } from '../user/shared/auth-service';
 })
 export class NavBarComponent {
 
-    constructor(private authService: AuthService) {
+    constructor() { // private authService: AuthService
 
     }
 }
+

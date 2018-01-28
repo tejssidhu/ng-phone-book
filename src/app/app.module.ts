@@ -4,8 +4,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { AuthGuardService } from './common/guards/auth.guard';
+import { AuthService } from './common/services/auth.service';
+
 import { AppComponent } from './app.component';
-import { LoginComponent, AuthService } from './user/index';
+import { LoginComponent } from './user/index';
 import { NavBarComponent } from './nav/index';
 import { AppRoutingModule } from './/app-routing.module';
 import { ToastModule} from 'ng2-toastr/ng2-toastr';
@@ -29,6 +32,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NavBarComponent
   ],
   providers: [
+    AuthGuardService,
     AuthService
   ],
   bootstrap: [AppComponent]
