@@ -52,7 +52,7 @@ describe('ContactThumbnailComponent', () => {
     });
     describe('deleteConfirmation', () => {
         it(`should raise delete confirmation event when delete is clicked`, async(() => {
-            let receivedResponse: string
+            let receivedResponse: string;
             comp.confirmDelete.subscribe((response: string) => receivedResponse = response);
 
             const deEl = fixture.debugElement.queryAll(By.css('td button'));

@@ -162,11 +162,11 @@ describe('AddContactComponent', () => {
                 }
             };
             activatedRoute.data = Observable.of(returnElement);
-            
+
             fixture.detectChanges();
             tick();
             fixture.detectChanges();
-            
+
             let deEl = fixture.debugElement.query(By.css('input#title'));
             let el = deEl.nativeElement;
             expect(el.value).toEqual(contact1.title);

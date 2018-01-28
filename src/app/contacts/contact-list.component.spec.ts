@@ -163,7 +163,7 @@ describe('ContactListComponent', () => {
             const comp = fixture.debugElement.componentInstance;
             const content = 'content';
             const id = 'id1';
-            let spy = spyOn(modalService, 'open').and.returnValue(
+            const spy = spyOn(modalService, 'open').and.returnValue(
                 {
                     result: Promise.resolve('ok')
                 }
@@ -173,13 +173,13 @@ describe('ContactListComponent', () => {
 
                 return Observable.of('id1');
             };
-            
+
             comp.deleteConfirmation(content, id);
 
             fixture.detectChanges();
             tick();
             fixture.detectChanges();
-            
+
             expect(contactServicedeleteContactCalled).toEqual(true);
             expect(contacts.find(contact => contact.id === 'id1').deleted).toEqual(true);
             expect(toastrSuccessCalled).toEqual(true);
@@ -188,7 +188,7 @@ describe('ContactListComponent', () => {
             const comp = fixture.debugElement.componentInstance;
             const content = 'content';
             const id = 'id1';
-            let spy = spyOn(modalService, 'open').and.returnValue(
+            const spy = spyOn(modalService, 'open').and.returnValue(
                 {
                     result: Promise.resolve('ok')
                 }
@@ -198,13 +198,13 @@ describe('ContactListComponent', () => {
 
                 return Observable.throw('error occured');
             };
-            
+
             comp.deleteConfirmation(content, id);
 
             fixture.detectChanges();
             tick();
             fixture.detectChanges();
-            
+
             expect(toastrErrorCalled).toEqual(true);
         }));
     });

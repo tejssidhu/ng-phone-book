@@ -143,8 +143,8 @@ describe('LoginComponent', () => {
             expect(comp.loginInvalid).toEqual(false);
             expect(navigateCalled).toEqual(true);
         }));
-        it('should navigate to contacts route', inject([Router], (router: Router) => {
-            const spy = spyOn(router, 'navigate');
+        it('should navigate to contacts route', inject([Router], (lRouter: Router) => {
+            const spy = spyOn(lRouter, 'navigate');
             authService.loginUser = function() {
                 const user: IUser = { id: 'id', username: 'username' };
                 return Observable.of(user);
@@ -152,7 +152,7 @@ describe('LoginComponent', () => {
             const comp = fixture.debugElement.componentInstance;
 
             comp.login();
-            
+
             fixture.detectChanges();
 
             const navArgs = spy.calls.first().args[0];
