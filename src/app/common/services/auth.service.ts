@@ -66,6 +66,9 @@ export class AuthService {
         return Observable.fromPromise(this.userManager.getUser())
         .map<User, boolean>((user) => {
             if (user) {
+                if (user.expired) {
+                    return false;
+                }
                 return true;
             } else {
                 return false;
