@@ -78,42 +78,42 @@ describe('LoginComponent', () => {
             delete store[key];
         });
     });
-    it('should create the app', async(() => {
+    xit('should create the app', async(() => {
         const de = fixture.debugElement.componentInstance;
         expect(de).toBeTruthy();
     }));
-    it(`should have title 'Login'`, async(() => {
+    xit(`should have title 'Login'`, async(() => {
         const titleEl = fixture.debugElement.query(By.css('h2'));
         const el = titleEl.nativeElement;
         expect(el.textContent).toEqual('Login');
     }));
-    it(`should have called logout when initialised`, async(() => {
+    xit(`should have called logout when initialised`, async(() => {
         fixture.detectChanges();
         expect(logOutCalled).toEqual(true);
     }));
-    it(`should have a username input`, async(() => {
+    xit(`should have a username input`, async(() => {
         const de = fixture.debugElement.query(By.css('#username'));
         const el = de.nativeElement;
         expect(el).toBeTruthy();
     }));
-    it(`should have a password input`, async(() => {
+    xit(`should have a password input`, async(() => {
         const de = fixture.debugElement.query(By.css('#password'));
         const el = de.nativeElement;
         expect(el).toBeTruthy();
     }));
-    it(`should have a button with text Login`, async(() => {
+    xit(`should have a button with text Login`, async(() => {
         const de = fixture.debugElement.query(By.css('button'));
         const el = de.nativeElement;
         expect(el).toBeTruthy();
         expect(el.textContent).toBe('Login');
     }));
-    it(`should have called loginUser when form is submitted`, async(() => {
+    xit(`should have called loginUser when form is submitted`, async(() => {
         const form = fixture.debugElement.query(By.css('form'));
         form.triggerEventHandler('submit', null);
         expect(loginUserCalled).toEqual(true);
     }));
 
-    describe('#login', () => {
+    xdescribe('#login', () => {
         it(`should have set loginInvalid and display warning message when loginUser doesnt return a user`, fakeAsync(() => {
             authService.loginUser = function() {
                 return Observable.of(null);
