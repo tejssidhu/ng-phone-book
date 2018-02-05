@@ -15,6 +15,24 @@ import { ToastModule} from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserManager, User, Log } from 'oidc-client';
+
+const config: any = {
+  authority: 'https://localhost:44301',
+  client_id: 'phonebook',
+  redirect_uri: 'http://localhost:4200/signin-callback.html',
+  post_logout_redirect_uri: 'http://localhost:4200',
+  response_type: 'id_token token',
+  scope: 'openid profile phonebookAPI.read phonebookAPI.write',
+
+  silent_redirect_uri: 'http://localhost:4200/silent-renew.html',
+  automaticSilentRenew: true,
+  accessTokenExpiringNotificationTime: 4,
+  // silentRequestTimeout:10000,
+
+  filterProtocolClaims: true,
+  loadUserInfo: true
+};
 
 @NgModule({
   imports: [
@@ -33,7 +51,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   providers: [
     AuthGuardService,
-    AuthService
+    AuthService,
+    {
+      provide: UserManager,
+      useFactory: () => new UserManager(config)
+    }
   ],
   bootstrap: [AppComponent]
 })

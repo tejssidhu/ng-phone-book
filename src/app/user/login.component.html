@@ -2,27 +2,6 @@
     <div class="col-md-10 col-md-offset-1">
         <h2>Login</h2>
 
-        <p>You need to login in order to view your phonebook.</p>
-        <!-- <p *ngIf="loginInvalid" class="bg-danger">The username or password wasn't recognised, please try again.</p>
-
-        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" autocomplete="off">
-            <div class="form-group">
-                <label for="username" class="col-md-offset-1 col-md-1 control-label">User Name</label>
-                <div class="col-md-3">
-                    <input id="username" name="username" type="text" class="form-control" [(ngModel)]="model.username" #username="ngModel" required placeholder="user name" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-md-offset-1 col-md-1 control-label">Password</label>
-                <div class="col-md-3">
-                    <input id="password" name="password" type="password" class="form-control" [(ngModel)]="model.password" #password="ngModel" required placeholder="password" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </div>
-            </div>
-        </form> -->
+        <p>You need to <a class="btn-xs" [routerLink]="['/contacts']">login</a> in order to view your phonebook.</p>
     </div>
 </div>
