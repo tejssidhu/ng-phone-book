@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AuthGuardService } from './common/guards/auth.guard';
 import { AuthService } from './common/services/auth.service';
+import { UserService } from './user/shared/user-service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './user/index';
@@ -52,6 +53,7 @@ const config: any = {
   providers: [
     AuthGuardService,
     AuthService,
+    UserService,
     {
       provide: UserManager,
       useFactory: () => new UserManager(config)
