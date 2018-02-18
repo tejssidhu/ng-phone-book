@@ -8,6 +8,7 @@ import { AuthService } from '../common/services/auth.service';
 })
 export class NavBarComponent implements OnInit {
     isAuthenticated: Boolean = false;
+    userName: String = '';
 
     constructor(private authService: AuthService) {
 
@@ -21,6 +22,16 @@ export class NavBarComponent implements OnInit {
                 this.isAuthenticated = false;
             }
         });
+
+        this.authService.getCurrentUser().subscribe(user => {
+            if (user) {
+                this.userName = user.profile.name;
+            }
+        });
+    }
+
+    login() {
+        this.authService.startSigninMainWindow();
     }
 
     logout() {

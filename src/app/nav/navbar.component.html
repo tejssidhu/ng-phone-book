@@ -10,8 +10,17 @@
             </li>
         </ul>
         <ul class="navbar-nav" *ngIf="this.isAuthenticated">
+            <li class="nav-item" ngbDropdown placement="bottom-right">
+                <a class="nav-link" id="navbarAccountDropdownMenuLink" ngbDropdownToggle>Account</a>
+                <div ngbDropdownMenu aria-labelledby="navbarAccountDropdownMenuLink">
+                    <button class="dropdown-item">Logged in as: {{userName}}</button>
+                    <a class="dropdown-item" (click)="logout()" href="#">Logout</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="!this.isAuthenticated">
             <li class="nav-item">
-                <a class="nav-link" (click)="logout()" href="#">Logout</a>
+                <a class="nav-link" (click)="login()" href="#">Login</a>
             </li>
         </ul>
     </div>

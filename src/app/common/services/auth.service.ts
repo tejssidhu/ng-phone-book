@@ -51,13 +51,9 @@ export class AuthService {
         });
     }
 
-    // clearState() {
-    //     this.userManager.clearStaleState().then(function () {
-    //         console.log('clearStateState success');
-    //     }).catch(function (e) {
-    //         console.log('clearStateState error', e.message);
-    //     });
-    // }
+    getCurrentUser(): Observable<User> {
+        return Observable.fromPromise(this.userManager.getUser());
+    }
 
     // getUser() {
     //     this.userManager.getUser().then((user) => {
@@ -69,14 +65,6 @@ export class AuthService {
     //     });
     // }
 
-    // removeUser() {
-    //     this.userManager.removeUser().then(() => {
-    //         this.userLoadededEvent.emit(null);
-    //         console.log('user removed');
-    //     }).catch(function (err) {
-    //         console.log(err);
-    //     });
-    // }
 
     startSigninMainWindow() {
         this.userManager.signinRedirect().then(function () {
@@ -85,14 +73,6 @@ export class AuthService {
             console.log(err);
         });
     }
-
-    // endSigninMainWindow() {
-    //     this.userManager.signinRedirectCallback().then(function (user) {
-    //         console.log('signed in', user);
-    //     }).catch(function (err) {
-    //         console.log(err);
-    //     });
-    // }
 
     startSignoutMainWindow() {
         this.userManager.signoutRedirect().then(function (resp) {
@@ -104,12 +84,4 @@ export class AuthService {
             console.log(err);
         });
     }
-
-    // endSignoutMainWindow() {
-    //     this.userManager.signoutRedirectCallback().then(function (resp) {
-    //         console.log('signed out', resp);
-    //     }).catch(function (err) {
-    //         console.log(err);
-    //     });
-    // }
 }

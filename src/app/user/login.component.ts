@@ -35,4 +35,8 @@ export class LoginComponent implements OnInit {
             }
         });
     }
+
+    login() {
+        this.authService.startSigninMainWindow();
+    }
 }
