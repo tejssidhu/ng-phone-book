@@ -94,17 +94,16 @@ export class AuthService {
     //     });
     // }
 
-    // startSignoutMainWindow() {
-    //     this.userManager.signoutRedirect().then(function (resp) {
-    //     console.log('signed out', resp);
-    //     setTimeout(5000, () => {
-    //         console.log('testing to see if fired...');
-
-    //     });
-    //     }).catch(function (err) {
-    //         console.log(err);
-    //     });
-    // }
+    startSignoutMainWindow() {
+        this.userManager.signoutRedirect().then(function (resp) {
+            console.log('signed out', resp);
+            setTimeout(5000, () => {
+                console.log('testing to see if fired...');
+            });
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
 
     // endSignoutMainWindow() {
     //     this.userManager.signoutRedirectCallback().then(function (resp) {

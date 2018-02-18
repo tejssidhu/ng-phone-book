@@ -4,9 +4,14 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['/contacts']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">My Contacts</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="this.isAuthenticated">
+            <li class="nav-item">
+                <a class="nav-link" (click)="logout()" href="#">Logout</a>
             </li>
         </ul>
     </div>
