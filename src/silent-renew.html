@@ -9,7 +9,12 @@
     <div id="error"></div>
     <script src="assets/oidc-client.min.js"></script>
     <script>
-         new UserManager().signinSilentCallback();
+        new UserManager().signinSilentCallback().then(function(user) {
+            console.log('all good');
+        })
+        .catch(function(reason) {
+            console.log(reason);
+        });
     </script>
 </body>
 </html>

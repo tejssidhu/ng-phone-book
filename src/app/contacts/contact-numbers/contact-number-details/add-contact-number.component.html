@@ -1,0 +1,20 @@
+<form class="form-horizontal" autocomplete="off" #contactNumberForm="ngForm" (ngSubmit)="saveContactNumber()">
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="title">Description</label>
+        <div class="col-md-10">
+            <input name="description" id="description" type="text" class="form-control" [(ngModel)]="contactNumber.description" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Telephone Number</label>
+        <div class="col-md-10">
+            <input name="telephoneNumber" id="telephoneNumber" type="text" class="form-control" [(ngModel)]="contactNumber.telephoneNumber" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary" [disabled]="!contactNumberForm.form.valid">Save</button>
+            <button type="button" class="btn btn-default" [routerLink]="['/contacts/contact', contactNumber.contactId]">Cancel</button>
+        </div>
+    </div>
+</form>
