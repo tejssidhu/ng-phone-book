@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav/index';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-
+import { AuthService } from './common/services/auth.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -31,6 +31,10 @@ describe('AppComponent', () => {
         {
           provide: ToastsManager,
           useValue: toastr
+        },
+        {
+          provide: AuthService,
+          useValue: authService
         }
       ]
     }).compileComponents();

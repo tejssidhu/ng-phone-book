@@ -4,6 +4,7 @@ import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '../common/services/auth.service';
+import { MockAuthService } from '../common/services/mock-auth.service';
 
 describe('LoginComponent', () => {
     let fixture: ComponentFixture<LoginComponent>;
@@ -54,26 +55,3 @@ describe('LoginComponent', () => {
         expect(de).toBeTruthy();
     }));
 });
-
-export class MockAuthService {
-    data: any;
-    error: any;
-    isLoggedInObsCalled: boolean;
-
-    isLoggedInObs() {
-        this.isLoggedInObsCalled = true;
-
-        return this;
-    }
-
-    subscribe(callback) {
-        if (!this.error) {
-            callback(this.data);
-        }
-        return this;
-    }
-
-    setData(data) {
-        this.data = data;
-    }
-}

@@ -10,7 +10,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { ContactDetailComponent } from './index';
-import { IContact, ContactService } from '../index';
+import { IContact, ContactService, ContactNumberListComponent } from '../index';
+import { MockContactNumberListComponent } from '../contact-numbers/mock-contact-number-list.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 describe('ContactDetailComponent', () => {
@@ -72,13 +73,17 @@ describe('ContactDetailComponent', () => {
                 };
             }
         };
+        const contactNumberServiceStub = {
+
+        };
         const activatedRouteStub = {
             data: []
         };
 
         TestBed.configureTestingModule({
             declarations: [
-                ContactDetailComponent
+                ContactDetailComponent,
+                MockContactNumberListComponent
             ],
             imports: [
                 RouterTestingModule,

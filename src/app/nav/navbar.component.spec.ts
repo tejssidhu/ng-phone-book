@@ -3,18 +3,15 @@ import { NavBarComponent } from './navbar.component';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
+import { AuthService } from '../common/services/auth.service';
+import { MockAuthService } from '../common/services/mock-auth.service';
 
 describe('NavBarComponent', () => {
     let fixture: ComponentFixture<NavBarComponent>;
     let de: DebugElement;
+    const isLoggedInObsCalled: Boolean = false;
 
     beforeEach(async(() => {
-        const authServiceStub = {
-            isAuthenticated: function() {
-                return false;
-            }
-        };
-
         TestBed.configureTestingModule({
         declarations: [
             NavBarComponent
@@ -22,7 +19,12 @@ describe('NavBarComponent', () => {
         imports: [
             RouterTestingModule
         ],
-        providers: [ ]
+        providers: [
+            {
+                provide: AuthService,
+                useClass: MockAuthService
+            }
+        ]
         }).compileComponents();
     }));
     beforeEach(() => {

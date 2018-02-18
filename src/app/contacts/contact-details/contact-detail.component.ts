@@ -27,20 +27,20 @@ export class ContactDetailComponent implements OnInit {
 
     deleteConfirmation(content, id: string) {
         this.modalService.open(content).result.then((result) => {
-                if (result === 'ok') {
-                    this.contactService.deleteContact(id).subscribe(
-                        data => {
-                            this.contact.deleted = true;
+            if (result === 'ok') {
+                this.contactService.deleteContact(id).subscribe(
+                    data => {
+                        this.contact.deleted = true;
 
-                            this._toastr.success('Contact ' + this.contact.forename + ' ' + this.contact.surname + ' was deleted.');
+                        this._toastr.success('Contact ' + this.contact.forename + ' ' + this.contact.surname + ' was deleted.');
 
-                            this.router.navigate(['/contacts']);
-                        },
-                        error => {
-                            this._toastr.error('Something went wrong: ' + error);
-                        });
-                }
+                        this.router.navigate(['/contacts']);
+                    },
+                    error => {
+                        this._toastr.error('Something went wrong: ' + error);
+                    }
+                );
             }
-        );
+        });
     }
 }
