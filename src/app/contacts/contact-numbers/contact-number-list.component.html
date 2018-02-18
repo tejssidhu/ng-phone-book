@@ -2,6 +2,22 @@
     <div class="col-md-10 col-md-offset-1">
         <h2>Contact Numbers</h2>
 
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Contact Number?</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the contact number?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="c('ok')">Ok</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">Cancel</button>
+            </div>
+        </ng-template>
+
         <div class="table-responsive">
             <table class="table table-hover table-striped table-condensed">
                 <thead>
@@ -20,7 +36,7 @@
             </table>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary" [routerLink]="['/contactNumbers/edit']">Add New</button>
+            <button type="button" class="btn btn-primary" [routerLink]="['/contacts/contact-number/edit', contact.id]">Add New</button>
         </div>
     </div>
 </div>

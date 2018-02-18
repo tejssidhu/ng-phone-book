@@ -1,4 +1,4 @@
 <td [routerLink]="['/contacts/contact-number', contactNumber.id]">{{contactNumber.description}}</td>
 <td [routerLink]="['/contacts/contact-number', contactNumber.id]">{{contactNumber.telephoneNumber}}</td>
-<td><button type="button" class="btn btn-primary btn-xs" [routerLink]="['/contacts/contact-number/edit', contactNumber.id]">Edit</button></td>
+<td><button type="button" class="btn btn-primary btn-xs" [routerLink]="['/contacts/contact-number/edit', contactNumber.contactId, contactNumber.id]">Edit</button></td>
 <td><button type="button" class="btn btn-danger btn-xs" (click)="deleteConfirm()">Delete</button></td>
