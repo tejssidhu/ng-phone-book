@@ -1,5 +1,6 @@
 import { AuthService } from './auth.service';
 import { UserManager, User } from 'oidc-client';
+import { MockUserManager } from './mock-user-manager';
 
 describe('AuthService', () => {
     let userManager: any;
@@ -110,71 +111,3 @@ describe('AuthService', () => {
         });
     });
 });
-
-export class MockUserManagerEvent {
-    addUserLoadedCalled: boolean;
-    addUserUnloadedCalled: boolean;
-
-    addUserLoaded() {
-        this.addUserLoadedCalled = true;
-
-        return {};
-    }
-
-    addUserUnloaded() {
-        this.addUserUnloadedCalled = true;
-
-        return {};
-    }
-}
-
-export class MockUserManager {
-    data: any;
-    error: any;
-    getUserCalled: boolean;
-    clearStaleStateCalled: boolean;
-    signinRedirectCalled: boolean;
-    events = new MockUserManagerEvent();
-    addUserLoadedCalled: boolean = this.events.addUserLoadedCalled;
-    addUserUnloadedCalled: boolean = this.events.addUserUnloadedCalled;
-
-    getUser() {
-        this.getUserCalled = true;
-
-        return this;
-    }
-
-    clearStaleState() {
-        this.clearStaleStateCalled = true;
-
-        return this;
-    }
-
-    signinRedirect() {
-        this.signinRedirectCalled = true;
-
-        return this;
-    }
-
-    then(callback) {
-        if (!this.error) {
-            callback(this.data);
-        }
-        return this;
-    }
-
-    catch(callback) {
-        if (this.error) {
-            callback(this.error);
-        }
-        return this;
-    }
-
-    setData(data) {
-        this.data = data;
-    }
-
-    setError(error) {
-        this.error = error;
-    }
-}

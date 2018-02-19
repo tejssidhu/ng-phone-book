@@ -121,7 +121,7 @@ describe('ContactNumberListComponent', () => {
             comp.contact = contact1;
             comp.getContactNumbers();
             fixture.detectChanges();
-            
+
             const deEl = fixture.debugElement.query(By.css('h2'));
             const el = deEl.nativeElement;
             expect(el.textContent).toEqual('Contact Numbers');
@@ -131,7 +131,7 @@ describe('ContactNumberListComponent', () => {
             comp.contact = contact1;
             comp.getContactNumbers();
             fixture.detectChanges();
-            
+
             const deEl = fixture.debugElement.queryAll(By.css('.table-responsive th'));
             const numOfEls = deEl.length;
             expect(numOfEls).toEqual(4);
@@ -152,6 +152,7 @@ describe('ContactNumberListComponent', () => {
     describe('#deleteConfirmation', () => {
         it(`should call modal service open`, fakeAsync(() => {
             const comp = fixture.debugElement.componentInstance;
+            comp.contact = contact1;
             const content = 'content';
             const id = 'id';
             comp.deleteConfirmation(content, id);
@@ -164,6 +165,7 @@ describe('ContactNumberListComponent', () => {
         }));
         it(`should call modal service open and if ok is returned then deleteContactNumber on contact number service is called`, fakeAsync(() => {
             const comp = fixture.debugElement.componentInstance;
+            comp.contact = contact1;
             const content = 'content';
             const id = 'id1';
             const spy = spyOn(modalService, 'open').and.returnValue(
@@ -189,6 +191,7 @@ describe('ContactNumberListComponent', () => {
         }));
         it(`should call toastr error if delete contact throws exception`, fakeAsync(() => {
             const comp = fixture.debugElement.componentInstance;
+            comp.contact = contact1;
             const content = 'content';
             const id = 'id1';
             const spy = spyOn(modalService, 'open').and.returnValue(
