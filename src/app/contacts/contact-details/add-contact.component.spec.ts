@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async, fakeAsync, tick, getTestBed, inject } from '@angular/core/testing';
 import { AddContactComponent } from './index';
 import { IContact, ContactService } from '../index';
-import { AuthService } from '../../user/index';
+import { AuthService } from '../../common/services/auth.service';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -22,7 +22,6 @@ describe('AddContactComponent', () => {
     let toastrErrorCalled: Boolean;
     let contactServiceCreateContactCalled: Boolean;
     let contactServiceUpdateContactCalled: Boolean;
-    let authUserGetUserIdCalled: Boolean;
     let navigateCalled: Boolean;
     let activatedRoute: ActivatedRoute;
     let contactService: ContactService;
@@ -40,9 +39,10 @@ describe('AddContactComponent', () => {
 
     beforeEach(async(() => {
         const authServiceStub = {
-            getUserId: function() {
-                authUserGetUserIdCalled = true;
-                return '1';
+            currentUser: {
+                profile: {
+                    sub: '1'
+                }
             }
         };
         const contactServiceStub = {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/RX';
-import { IContact } from './contact-model';
+import { IContactNumber } from './contact-number-model';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import * as myGlobals from '../../shared/globals';
@@ -8,56 +8,56 @@ import { of } from 'rxjs/observable/of';
 import { AuthService  } from '../../common/services/auth.service';
 
 @Injectable()
-export class ContactService {
+export class ContactNumberService {
     constructor(private http: HttpClient, private authService: AuthService) {
 
     }
 
-    getContacts(userId: string): Observable<IContact[]> {
+    getContactNumbers(contactId: string): Observable<IContactNumber[]> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.get<any>(myGlobals.serviceRootUrl + 'Users(' + userId + ')' + '/Phonebook.MyContacts', {headers: headers}).pipe(
+        return this.http.get<any>(myGlobals.serviceRootUrl + 'Contacts(' + contactId + ')' + '/Phonebook.GetContactNumbers', {headers: headers}).pipe(
             map(data => {
-                return <IContact[]>data.value;
+                return <IContactNumber[]>data.value;
             }),
-            tap((contacts: IContact[]) => console.log(`${contacts.length} contacts loaded`)),
-            catchError(this.handleError<any>('getContacts'))
+            tap((contactNumbers: IContactNumber[]) => console.log(`${contactNumbers.length} contact numbers loaded`)),
+            catchError(this.handleError<any>('getContactNumbers'))
         );
     }
 
-    getContact(id: string): Observable<IContact> {
+    getContactNumber(id: string): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.get<IContact>(myGlobals.serviceRootUrl + 'Contacts(' + id + ')', {headers: headers}).pipe(
-            tap((contact: IContact) => console.log(`${contact.id} contact loaded`)),
+        return this.http.get<IContactNumber>(myGlobals.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
+            tap((contactNumber: IContactNumber) => console.log(`${contactNumber.id} contact loaded`)),
             catchError(this.handleError<any>('getContact'))
         );
     }
 
-    createContact(contact: IContact): Observable<IContact> {
+    createContactNumber(contactNumber: IContactNumber): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.post<IContact>(myGlobals.serviceRootUrl + 'Contacts', JSON.stringify(contact), {headers: headers}).pipe(
-            tap((newContact: IContact) => console.log(`contact created: userId=${newContact.id}`)),
-            catchError(this.handleError<any>('createContact'))
+        return this.http.post<IContactNumber>(myGlobals.serviceRootUrl + 'ContactNumbers', JSON.stringify(contactNumber), {headers: headers}).pipe(
+            tap((newContactNumber: IContactNumber) => console.log(`contact number created: Id=${newContactNumber.id}`)),
+            catchError(this.handleError<any>('createContactNumber'))
         );
     }
 
-    updateContact(contact: IContact): Observable<IContact> {
+    updateContactNumber(contactNumber: IContactNumber): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.put(myGlobals.serviceRootUrl + 'Contacts(' + contact.id + ')', JSON.stringify(contact), {headers: headers}).pipe(
-            tap((newContact: IContact) => console.log(`contact updated: userId=${newContact.id}`)),
-            catchError(this.handleError<any>('createContact'))
+        return this.http.put(myGlobals.serviceRootUrl + 'ContactNumbers(' + contactNumber.id + ')', JSON.stringify(contactNumber), {headers: headers}).pipe(
+            tap((newContactNumber: IContactNumber) => console.log(`contact number updated: Id=${newContactNumber.id}`)),
+            catchError(this.handleError<any>('updateContactNumber'))
         );
     }
 
-    deleteContact(id: string): Observable<string> {
+    deleteContactNumber(id: string): Observable<string> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.delete(myGlobals.serviceRootUrl + 'Contacts(' + id + ')', {headers: headers}).pipe(
-            tap((response: string) => console.log(`contact deleted: userId=${response}`)),
-            catchError(this.handleError<any>('createContact'))
+        return this.http.delete(myGlobals.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
+            tap((response: string) => console.log(`contact number deleted: Id=${response}`)),
+            catchError(this.handleError<any>('deleteContactNumber'))
         );
     }
 

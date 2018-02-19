@@ -9,7 +9,7 @@ import { DebugElement, Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { ContactListComponent, ContactService, IContact, ContactThumbnailComponent } from './index';
-import { AuthService } from '../user/index';
+import { AuthService } from '../common/services/auth.service';
 import * as myGlobals from '../shared/globals';
 import { MockThumbnailDirective } from './mock-thumbnail.directive';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap/modal/modal';
@@ -19,7 +19,6 @@ describe('ContactListComponent', () => {
     let injector: TestBed;
     let contactServiceGetContactsCalled: Boolean;
     let contactServicedeleteContactCalled: Boolean;
-    let authUserGetUserIdCalled: Boolean;
     let modalServiceOpenCalled: Boolean;
     let modalServiceContent: string;
     let toastrSuccessCalled: Boolean;
@@ -33,9 +32,10 @@ describe('ContactListComponent', () => {
 
     beforeEach(() => {
         const authServiceStub = {
-            getUserId: function() {
-                authUserGetUserIdCalled = true;
-                return 1;
+            currentUser: {
+                profile: {
+                    sub: 1
+                }
             }
         };
         const contactServiceStub = {
@@ -111,7 +111,7 @@ describe('ContactListComponent', () => {
         expect(de).toBeTruthy();
     }));
     describe('#getContact', () => {
-        it(`should call auth service getUserId and contact service getContacts`, fakeAsync(() => {
+        it(`should call getContacts on contact service`, fakeAsync(() => {
             const comp = fixture.debugElement.componentInstance;
             comp.getContacts();
             comp.contacts = contacts;
@@ -119,7 +119,6 @@ describe('ContactListComponent', () => {
             tick();
 
             fixture.detectChanges();
-            expect(authUserGetUserIdCalled).toEqual(true);
             expect(contactServiceGetContactsCalled).toEqual(true);
         }));
     });

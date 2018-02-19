@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IContact, ContactService } from './shared/index';
-import { AuthService } from '../user/shared/index';
+import { AuthService } from '../common/services/auth.service';
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
@@ -23,8 +23,7 @@ export class ContactListComponent implements OnInit {
     }
 
     getContacts() {
-        const userId = this.authService.getUserId();
-        this.contactService.getContacts(userId).subscribe(
+        this.contactService.getContacts(this.authService.currentUser.profile.sub).subscribe(
             data => this.contacts = data
         );
     }

@@ -1,3 +1,3 @@
 'use strict';
 
-export const serviceRootUrl = 'http://localhost/Phonebook.WebApi/';
+export const serviceRootUrl = 'http://localhost:9000/';

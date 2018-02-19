@@ -8,7 +8,13 @@ import { ContactListComponent,
   ContactThumbnailComponent,
   ContactResolver,
   ContactService,
-  AddContactComponent
+  AddContactComponent,
+  ContactNumberListComponent,
+  ContactNumberThumbnailComponent,
+  ContactNumberResolver,
+  ContactNumberService,
+  ContactNumberDetailComponent,
+  AddContactNumberComponent
 } from './index';
 
 import { contactRoutes } from './routes';
@@ -27,10 +33,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ContactDetailComponent,
     ContactThumbnailComponent,
     AddContactComponent,
+    ContactNumberListComponent,
+    ContactNumberThumbnailComponent,
+    ContactNumberDetailComponent,
+    AddContactNumberComponent
   ],
   providers:    [
     ContactResolver,
-    ContactService
+    ContactService,
+    ContactNumberResolver,
+    ContactNumberService
   ]
 })
 export class ContactsAppModule { }

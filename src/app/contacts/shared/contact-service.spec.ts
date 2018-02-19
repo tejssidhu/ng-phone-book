@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as myGlobals from '../../shared/globals';
 import { ContactService } from './index';
 import { IContact } from './contact-model';
+import { AuthService } from '../../common/services/auth.service';
 
 describe('ContactService', () => {
     let injector: TestBed;
@@ -10,9 +11,20 @@ describe('ContactService', () => {
     let httpMock: HttpTestingController;
 
     beforeEach(() => {
+        const authServiceStub = {
+            currentUser: {
+                access_token: '1'
+            }
+        };
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [ContactService]
+            providers: [
+                ContactService,
+                {
+                    provide: AuthService,
+                    useValue: authServiceStub
+                }
+            ]
         });
         injector = getTestBed();
         service = injector.get(ContactService);
@@ -94,7 +106,7 @@ describe('ContactService', () => {
     describe('#deleteContact', () => {
         it('should return an Observable<string>', () => {
             const dummyContact = {
-                 id: 'sarah2', anotherPrrop: 'a'
+                 id: 'sarah2'
             };
 
             service.deleteContact(dummyContact.id).subscribe(response => {

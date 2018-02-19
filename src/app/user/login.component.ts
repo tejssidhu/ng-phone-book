@@ -1,6 +1,8 @@
 import { Component, OnInit  } from '@angular/core';
-import { AuthService } from './shared/index';
-import { Router  } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../common/services/auth.service';
+import { UserService } from './shared/user-service';
+import { IUser } from './shared/user-model';
 
 @Component({
     moduleId: module.id,
@@ -8,31 +10,33 @@ import { Router  } from '@angular/router';
     templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
-    model: any = {};
-    loginInvalid = false;
-
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private router: Router, private authService: AuthService, private userService: UserService) {
 
     }
 
     ngOnInit() {
-        this.authService.logout();
+        const isLoggedIn = this.authService.isLoggedInObs();
+        isLoggedIn.subscribe((loggedin) => {
+            if (loggedin) {
+                // get or create local user
+                this.userService.getUser(this.authService.currentUser.profile.sub).subscribe((user) => {
+                    if (!user) {
+                        const newUser: IUser = {
+                            id: this.authService.currentUser.profile.sub,
+                            username: this.authService.currentUser.profile.name
+                        };
+                        this.userService.createUser(newUser).subscribe(() => {
+                            this.router.navigate(['contacts']);
+                        });
+                    } else {
+                        this.router.navigate(['contacts']);
+                    }
+                });
+            }
+        });
     }
 
     login() {
-        this.authService.loginUser(this.model.username, this.model.password).subscribe(
-            returnedUser => {
-                const user = returnedUser;
-                if (user) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.router.navigate(['contacts']);
-                } else {
-                    this.loginInvalid = true;
-                }
-            },
-            error => {
-                this.loginInvalid = true;
-            }
-        );
+        this.authService.startSigninMainWindow();
     }
 }

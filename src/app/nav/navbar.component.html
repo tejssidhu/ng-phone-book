@@ -4,11 +4,23 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item" *ngIf="this.authService.isAuthenticated()"><a class="nav-link" [routerLink]="['/contacts']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">My Contacts</a></li>
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" *ngIf="!this.authService.isAuthenticated()" [routerLink]="['login']">Login</a>
-                <a class="nav-link" *ngIf="this.authService.isAuthenticated()" [routerLink]="['login']">Log out</a>
+                <a class="nav-link" [routerLink]="['/contacts']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">My Contacts</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="this.isAuthenticated">
+            <li class="nav-item" ngbDropdown placement="bottom-right">
+                <a class="nav-link" id="navbarAccountDropdownMenuLink" ngbDropdownToggle>Account</a>
+                <div ngbDropdownMenu aria-labelledby="navbarAccountDropdownMenuLink">
+                    <button class="dropdown-item">Logged in as: {{userName}}</button>
+                    <a class="dropdown-item" (click)="logout()" href="#">Logout</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="!this.isAuthenticated">
+            <li class="nav-item">
+                <a class="nav-link" (click)="login()" href="#">Login</a>
             </li>
         </ul>
     </div>
