@@ -1,5 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/RX';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/map';
 import { UserManager, User, Log } from 'oidc-client';
 
 Log.logger = console;

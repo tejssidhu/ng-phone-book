@@ -8,7 +8,6 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
     selector: 'contact-number-list',
     templateUrl: 'contact-number-list.component.html'
 })
-
 export class ContactNumberListComponent implements OnInit {
     @Input() contact: IContact;
     @Output() confirmDelete = new EventEmitter<string>();
