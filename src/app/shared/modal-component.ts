@@ -1,5 +1,5 @@
 ﻿import { Component, Output, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs/RX';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     moduleId: module.id,
@@ -27,7 +27,7 @@ import { Subject } from 'rxjs/RX';
 `
 })
 export class ModalComponent {
-    private hideModal: boolean = true;
+    hideModal: boolean = true;
     private clickStream = new Subject<boolean>();
     @Output() observable = this.clickStream.asObservable();
 
