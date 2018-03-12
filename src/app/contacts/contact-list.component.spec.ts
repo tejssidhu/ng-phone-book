@@ -10,7 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { ContactListComponent, ContactService, IContact, ContactThumbnailComponent } from './index';
 import { AuthService } from '../common/services/auth.service';
-import * as myGlobals from '../shared/globals';
+import { environment } from '../../environments/environment';
 import { MockThumbnailDirective } from './mock-thumbnail.directive';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { IContactNumber } from './contact-number-model';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import * as myGlobals from '../../shared/globals';
+import { environment } from '../../../environments/environment';
 import { of } from 'rxjs/observable/of';
 import { AuthService  } from '../../common/services/auth.service';
 
@@ -16,7 +16,7 @@ export class ContactNumberService {
     getContactNumbers(contactId: string): Observable<IContactNumber[]> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.get<any>(myGlobals.serviceRootUrl + 'Contacts(' + contactId + ')' + '/Phonebook.GetContactNumbers', {headers: headers}).pipe(
+        return this.http.get<any>(environment.serviceRootUrl + 'Contacts(' + contactId + ')' + '/ContactNumbers', {headers: headers}).pipe(
             map(data => {
                 return <IContactNumber[]>data.value;
             }),
@@ -28,7 +28,7 @@ export class ContactNumberService {
     getContactNumber(id: string): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.get<IContactNumber>(myGlobals.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
+        return this.http.get<IContactNumber>(environment.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
             tap((contactNumber: IContactNumber) => console.log(`${contactNumber.id} contact loaded`)),
             catchError(this.handleError<any>('getContact'))
         );
@@ -37,7 +37,7 @@ export class ContactNumberService {
     createContactNumber(contactNumber: IContactNumber): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.post<IContactNumber>(myGlobals.serviceRootUrl + 'ContactNumbers', JSON.stringify(contactNumber), {headers: headers}).pipe(
+        return this.http.post<IContactNumber>(environment.serviceRootUrl + 'ContactNumbers', JSON.stringify(contactNumber), {headers: headers}).pipe(
             tap((newContactNumber: IContactNumber) => console.log(`contact number created: Id=${newContactNumber.id}`)),
             catchError(this.handleError<any>('createContactNumber'))
         );
@@ -46,7 +46,7 @@ export class ContactNumberService {
     updateContactNumber(contactNumber: IContactNumber): Observable<IContactNumber> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.put(myGlobals.serviceRootUrl + 'ContactNumbers(' + contactNumber.id + ')', JSON.stringify(contactNumber), {headers: headers}).pipe(
+        return this.http.put(environment.serviceRootUrl + 'ContactNumbers(' + contactNumber.id + ')', JSON.stringify(contactNumber), {headers: headers}).pipe(
             tap((newContactNumber: IContactNumber) => console.log(`contact number updated: Id=${newContactNumber.id}`)),
             catchError(this.handleError<any>('updateContactNumber'))
         );
@@ -55,7 +55,7 @@ export class ContactNumberService {
     deleteContactNumber(id: string): Observable<string> {
         const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.currentUser.access_token});
 
-        return this.http.delete(myGlobals.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
+        return this.http.delete(environment.serviceRootUrl + 'ContactNumbers(' + id + ')', {headers: headers}).pipe(
             tap((response: string) => console.log(`contact number deleted: Id=${response}`)),
             catchError(this.handleError<any>('deleteContactNumber'))
         );

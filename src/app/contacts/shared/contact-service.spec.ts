@@ -1,6 +1,6 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as myGlobals from '../../shared/globals';
+import { environment } from '../../../environments/environment';
 import { ContactService } from './index';
 import { IContact } from './contact-model';
 import { AuthService } from '../../common/services/auth.service';
@@ -50,7 +50,7 @@ describe('ContactService', () => {
                 expect(contacts[1].userId).toEqual(dummyContacts.value[1].userId);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Users(${userId})/Phonebook.MyContacts`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Users(${userId})/Phonebook.MyContacts`);
             expect(req.request.method).toBe('GET');
             req.flush(dummyContacts);
         });
@@ -66,7 +66,7 @@ describe('ContactService', () => {
                 expect(contact.email).toEqual(dummyContact.email);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Contacts(${dummyContact.id})`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts(${dummyContact.id})`);
             expect(req.request.method).toBe('GET');
             req.flush(dummyContact);
         });
@@ -82,7 +82,7 @@ describe('ContactService', () => {
                 expect(contact.email).toEqual(dummyContact.email);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Contacts`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts`);
             expect(req.request.method).toBe('POST');
             req.flush(dummyContact);
         });
@@ -98,7 +98,7 @@ describe('ContactService', () => {
                 expect(contact.email).toEqual(dummyContact.email);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Contacts(${dummyContact.id})`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts(${dummyContact.id})`);
             expect(req.request.method).toBe('PUT');
             req.flush(dummyContact);
         });
@@ -113,7 +113,7 @@ describe('ContactService', () => {
                 expect(response).toEqual('OK');
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Contacts(${dummyContact.id})`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts(${dummyContact.id})`);
             expect(req.request.method).toBe('DELETE');
             req.flush('OK');
         });
