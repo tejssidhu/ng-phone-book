@@ -22,7 +22,9 @@ export class MockUserManager {
 
     then(callback) {
         if (!this.error) {
-            callback(this.data);
+            if (callback) {
+                callback(this.data);
+            }
         }
         return this;
     }

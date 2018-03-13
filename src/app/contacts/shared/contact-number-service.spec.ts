@@ -50,7 +50,7 @@ describe('ContactNumberService', () => {
                 expect(contactNumbers[1].description).toEqual(dummyContacts.value[1].description);
             });
 
-            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts(${contactId})/Phonebook.GetContactNumbers`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Contacts(${contactId})/ContactNumbers`);
             expect(req.request.method).toBe('GET');
             req.flush(dummyContacts);
         });

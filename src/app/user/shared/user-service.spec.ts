@@ -3,7 +3,7 @@ import { IUser } from './user-model';
 import { MockAuthService } from '../../common/services/mock-auth.service';
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as myGlobals from '../../shared/globals';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../common/services/auth.service';
 
 describe('ContactService', () => {
@@ -45,7 +45,7 @@ describe('ContactService', () => {
                 expect(user.username).toEqual(dummyUser.username);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Users(${dummyUser.id})`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Users(${dummyUser.id})`);
             expect(req.request.method).toBe('GET');
             req.flush(dummyUser);
         });
@@ -64,7 +64,7 @@ describe('ContactService', () => {
                 expect(user.username).toEqual(dummyUser.username);
             });
 
-            const req = httpMock.expectOne(`${myGlobals.serviceRootUrl}Users`);
+            const req = httpMock.expectOne(`${environment.serviceRootUrl}Users`);
             expect(req.request.method).toBe('POST');
             req.flush(dummyUser);
         });

@@ -1,3 +1,4 @@
+import { fakeAsync, tick } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { UserManager, User } from 'oidc-client';
 import { MockUserManager } from './mock-user-manager';
@@ -52,15 +53,20 @@ describe('AuthService', () => {
         it('on initialise currentUser is correct', () => {
             expect(service.currentUser).toEqual(testUser);
         });
-        it('isLoggedInObs loggedIn is true', () => {
+        it('isLoggedInObs loggedIn is true', fakeAsync(() => {
+            let isLoggedIn = false;
             userManager = new MockUserManager();
             userManager.setData(testUser);
             service = new AuthService(userManager);
 
             service.isLoggedInObs().subscribe((loggedin) => {
-                expect(loggedin).toBeTruthy();
+                isLoggedIn = loggedin;
             });
-        });
+
+            tick();
+
+            expect(isLoggedIn).toBeTruthy();
+        }));
     });
     describe('when getUser returns an invalid user', () => {
         beforeEach(() => {
