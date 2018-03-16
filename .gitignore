@@ -43,3 +43,4 @@ Thumbs.db
 .vs/VSWorkspaceState.json
 .vs/slnx.sqlite
 .vs/ng-phone-book/v15/.suo
+TESTS-*.xml
